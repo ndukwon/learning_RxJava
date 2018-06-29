@@ -25,5 +25,8 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+
+    // RxJava library: https://github.com/ReactiveX/RxJava
+    compile "io.reactivex.rxjava2:rxjava:2.1.16"
 }
 
