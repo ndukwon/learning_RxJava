@@ -1,5 +1,5 @@
-package com.duk.lab.rxjava;/*
-    com.duk.lab.rxjava.FirstExampleKotlin.java
+package com.duk.lab.rxjava.chapter1;/*
+    com.duk.lab.rxjava.chapter1.FirstExampleKotlin.java
     learning_RxJava
 
     Created by Dukwon Nam on 2018. 6. 29..

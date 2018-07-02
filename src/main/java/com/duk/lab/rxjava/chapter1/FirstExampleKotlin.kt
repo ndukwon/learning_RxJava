@@ -1,9 +1,9 @@
-package com.duk.lab.rxjava
+package com.duk.lab.rxjava.chapter1
 
 import io.reactivex.Observable
 
 /*
-    com.duk.lab.rxjava.FirstExampleKotlin.ktlin.kt
+    com.duk.lab.rxjava.chapter1.FirstExampleKotlin.ktlin.kt
     learning_RxJava
 
     Created by Dukwon Nam on 2018. 6. 29..
