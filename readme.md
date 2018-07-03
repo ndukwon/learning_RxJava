@@ -10,7 +10,7 @@
 
 
 # Chapter 2
-###1. Observable 객체(구독할 대상)를 생성하는 방법: Factory Pattern
+### 1. Observable 객체(구독할 대상)를 생성하는 방법: Factory Pattern
 1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
 1.2 create(): onNext(), OnError(), onComplete() 를 직접 호출해야 함
      - 잠재적 Memory leak 주의: dispose할때 등록된 콜백을 모두 해지해야 함
@@ -31,7 +31,7 @@
 1.7. fromPublisher(): Flow API의 일부(Java9)
      - onNext(), onComplete() 호출할 수 있다.
 
-###2. Single: 1개의 data만 발행하도록 한정. 발행과 동시에 종료된다.
+### 2. Single: 1개의 data만 발행하도록 한정. 발행과 동시에 종료된다.
    - onSuccess(): 발행 및 종료 = onNext() + onComplete()
    - onError(): 에러
    - Observable에서 변환
@@ -41,15 +41,15 @@
      d. observable.take(1): 맨 첫번째
 
 
-###3. Maybe
+### 3. Maybe
 
-###4. Hot Observable
+### 4. Hot Observable
   Cold Observable >> | Subject 객체 생성           | >> Hot Observable
                      | ConnectableObservable 이용 |
-###5. Subject
+### 5. Subject
 5.1. AsyncSubject
 5.2. Behavior
 5.3. PublishSubject
 5.4. Replay
 
-###6. ConnectableObservable
+### 6. ConnectableObservable
