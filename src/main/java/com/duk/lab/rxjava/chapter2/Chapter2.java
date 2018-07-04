@@ -13,6 +13,11 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.subjects.AsyncSubject;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
@@ -239,5 +244,146 @@ public class Chapter2 {
         Observable.just("A", "B")
                 .single("C")
                 .subscribe(System.out::println);
+    }
+
+    public void ex23_AsyncSubject() {
+        AsyncSubject<String> subject = AsyncSubject.create();
+        subject.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        subject.onNext("1");
+        subject.onNext("3");
+        subject.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        subject.onNext("5");
+        subject.onComplete();
+
+        /*
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    public void ex24_AsyncSubject_subscriber() {
+        // Subscriber
+        AsyncSubject<Float> subject = AsyncSubject.create();
+        subject.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+
+        // Observable
+        Float[] temperature = {10.1f, 13.4f, 12.5f};
+        Observable.fromArray(temperature)
+                .subscribe(subject);
+
+        /*
+        Subscriber #1 => 12.5
+         */
+    }
+
+    public void ex25_AsyncSubject_afterComplete() {
+        AsyncSubject<Integer> subject = AsyncSubject.create();
+        subject.onNext(10);
+        subject.onNext(11);
+        subject.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        subject.onNext(12);
+        subject.onComplete();
+        subject.onNext(13);
+        subject.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        subject.subscribe(data -> System.out.println("Subscriber #3 => " + data));
+
+        /*
+        Subscriber #1 => 12
+        Subscriber #2 => 12
+        Subscriber #3 => 12
+         */
+    }
+
+    public void ex26_BehaviorSubject() {
+        BehaviorSubject<String> behavior = BehaviorSubject.createDefault("6");
+        behavior.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        behavior.onNext("1");
+        behavior.onNext("3");
+        behavior.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        behavior.onNext("5");
+        behavior.onComplete();
+
+        /*
+        Subscriber #1 => 6
+        Subscriber #1 => 1
+        Subscriber #1 => 3
+        Subscriber #2 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    public void ex27_PublishSubject() {
+        PublishSubject<String> publish = PublishSubject.create();
+        publish.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        publish.onNext("1");
+        publish.onNext("3");
+        publish.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        publish.onNext("5");
+        publish.onComplete();
+
+        /*
+        Subscriber #1 => 1
+        Subscriber #1 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    public void ex28_ReplaySubject() {
+        ReplaySubject<String> replay = ReplaySubject.create();
+        replay.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        replay.onNext("1");
+        replay.onNext("3");
+        replay.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        replay.onNext("5");
+        replay.onComplete();
+
+        /*
+        Subscriber #1 => 1
+        Subscriber #1 => 3
+        Subscriber #2 => 1
+        Subscriber #2 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    public void ex29_ConnectableObservable() {
+        String[] dt = {"1", "3", "5"};
+
+        Observable<String> balls = Observable.interval(100L, TimeUnit.MILLISECONDS) // interval(100개, 밀리세컨즈 단위)
+                .map(Long::intValue)
+                .map(i -> dt[i])
+                .take(dt.length);
+
+        ConnectableObservable<String> source = balls.publish();
+        source.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        source.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        source.connect();
+
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        source.subscribe(data -> System.out.println("Subscriber #3 => " + data));
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        /*
+        Subscriber #1 => 1
+        Subscriber #2 => 1
+        Subscriber #1 => 3
+        Subscriber #2 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+        Subscriber #3 => 5
+         */
     }
 }

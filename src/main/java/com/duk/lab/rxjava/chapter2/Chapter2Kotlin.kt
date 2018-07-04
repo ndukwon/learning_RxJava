@@ -13,12 +13,18 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.subjects.AsyncSubject
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 import org.reactivestreams.Publisher
 import org.reactivestreams.Subscriber
 import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class Chapter2Kotlin {
     fun ex1_just() {
@@ -221,5 +227,153 @@ class Chapter2Kotlin {
         Observable.just("A", "B")
                 .single("C")
                 .subscribe(Consumer { println(it) })
+    }
+
+    fun ex23_AsyncSubject() {
+        val subject: AsyncSubject<String> = AsyncSubject.create()
+        subject.subscribe { data -> println("Subscriber #1 => $data") }
+        subject.onNext("1")
+        subject.onNext("3")
+        subject.subscribe { data -> println("Subscriber #2 => $data") }
+        subject.onNext("5")
+        subject.onComplete()
+
+        /*
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    fun ex24_AsyncSubject_subscriber() {
+        // Subscriber
+        val subject = AsyncSubject.create<Float>()
+        subject.subscribe { data -> println("Subscriber #1 => " + data!!) }
+
+        // Observable
+//        val temperature = arrayOf(10.1f, 13.4f, 12.5f)
+        val temperature = ArrayList<Float>()
+        temperature.add(10.1f)
+        temperature.add(13.4f)
+        temperature.add(12.5f)
+        Observable.fromIterable(temperature)
+                .subscribe(subject)
+
+        /*
+        Subscriber #1 => 12.5
+         */
+    }
+
+    fun ex25_AsyncSubject_afterComplete() {
+        val subject = AsyncSubject.create<Int>()
+        subject.onNext(10)
+        subject.onNext(11)
+        subject.subscribe { data -> println("Subscriber #1 => " + data!!) }
+        subject.onNext(12)
+        subject.onComplete()
+        subject.onNext(13)
+        subject.subscribe { data -> println("Subscriber #2 => " + data!!) }
+        subject.subscribe { data -> println("Subscriber #3 => " + data!!) }
+
+        /*
+        Subscriber #1 => 12
+        Subscriber #2 => 12
+        Subscriber #3 => 12
+         */
+    }
+
+    fun ex26_BehaviorSubject() {
+        val behavior = BehaviorSubject.createDefault("6")
+        behavior.subscribe { data -> println("Subscriber #1 => $data") }
+        behavior.onNext("1")
+        behavior.onNext("3")
+        behavior.subscribe { data -> println("Subscriber #2 => $data") }
+        behavior.onNext("5")
+        behavior.onComplete()
+
+        /*
+        Subscriber #1 => 6
+        Subscriber #1 => 1
+        Subscriber #1 => 3
+        Subscriber #2 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    fun ex27_PublishSubject() {
+        val publish = PublishSubject.create<String>()
+        publish.subscribe { data -> println("Subscriber #1 => $data") }
+        publish.onNext("1")
+        publish.onNext("3")
+        publish.subscribe { data -> println("Subscriber #2 => $data") }
+        publish.onNext("5")
+        publish.onComplete()
+
+        /*
+        Subscriber #1 => 1
+        Subscriber #1 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    fun ex28_ReplaySubject() {
+        val replay = ReplaySubject.create<String>()
+        replay.subscribe { data -> println("Subscriber #1 => $data") }
+        replay.onNext("1")
+        replay.onNext("3")
+        replay.subscribe { data -> println("Subscriber #2 => $data") }
+        replay.onNext("5")
+        replay.onComplete()
+
+        /*
+        Subscriber #1 => 1
+        Subscriber #1 => 3
+        Subscriber #2 => 1
+        Subscriber #2 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+         */
+    }
+
+    fun ex29_ConnectableObservable() {
+        val dt = ArrayList<String>()
+        dt.add("1")
+        dt.add("3")
+        dt.add("5")
+
+        val balls = Observable.interval(100L, TimeUnit.MILLISECONDS) // interval(100개, 밀리세컨즈 단위)
+                .map(Long::toInt)
+                .map { i -> dt.get(i) }
+                .take(dt.size.toLong())
+
+        val source = balls.publish()
+        source.subscribe { data -> println("Subscriber #1 => $data") }
+        source.subscribe { data -> println("Subscriber #2 => $data") }
+        source.connect()
+
+        try {
+            Thread.sleep(250)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        source.subscribe { data -> println("Subscriber #3 => $data") }
+
+        try {
+            Thread.sleep(100)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        /*
+        Subscriber #1 => 1
+        Subscriber #2 => 1
+        Subscriber #1 => 3
+        Subscriber #2 => 3
+        Subscriber #1 => 5
+        Subscriber #2 => 5
+        Subscriber #3 => 5
+         */
     }
 }
