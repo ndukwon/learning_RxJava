@@ -24,27 +24,28 @@
 	1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
 
 	1.2 create(): onNext(), OnError(), onComplete() 를 직접 호출해야 함
-	* 잠재적 Memory leak 주의: dispose할때 등록된 콜백을 모두 해지해야 함
-	* subscribe 하는 동안만 onNext, onComplete 호출해야 함
-	* 에러는 onError로만(Exception 안되나?)
-	* 배압(back pressure) 직접 처리해야 함
-
+        * 잠재적 Memory leak 주의: dispose할때 등록된 콜백을 모두 해지해야 함
+	    * subscribe 하는 동안만 onNext, onComplete 호출해야 함
+	    * 에러는 onError로만(Exception 안되나?)
+	    * 배압(back pressure) 직접 처리해야 함
+	
 	1.3. fromArray():
-	* 선언부터 array 형태
-	* int[] >> Integer[]로 변형해야 함
-	* ArrayList는 iterable로 가야함
+	    * 선언부터 array 형태
+	    * int[] >> Integer[]로 변형해야 함
+	    * ArrayList는 iterable로 가야함
 
 	1.4. fromIterable(): list, set, queue 같은 Iterator를 구현해놓은 Collection 클래스
-	* Map은 Iterator를 구현하지 않아서 X >> github에다가 fromMap() 도전해보길..
+	    * Map은 Iterator를 구현하지 않아서 X >> github에다가 fromMap() 도전해보길..
 
 	1.5. fromCallable(): Callable API(Java5) 사용시
-	* Callable은 여러 쓰레드를 병렬로 돌리는 조건에서(ex:병렬계산) Thread를 직접 만들지 않고 쓸 수 있게 하는 기능, Runnable과 유사하지만 Return을 할 수 있다는 점에서 다르다.
+	    * Callable은 여러 쓰레드를 병렬로 돌리는 조건에서(ex:병렬계산) Thread를 직접 만들지 않고 쓸 수 있게 하는 기능, Runnable과 유사하지만 Return을 할 수 있다는 점에서 다르다.
 
 	1.6. fromFuture(): Future API(Java5) 사용시
-	* Callable의 리턴값을 받아올때 사용. get()하면 Callable이 리턴할때까지 블로킹 된다.
+	    * Callable의 리턴값을 받아올때 사용.
+	    * get()하면 Callable이 리턴할때까지 블로킹 된다.
 
 	1.7. fromPublisher(): Flow API의 일부(Java9)
-	* onNext(), onComplete() 호출할 수 있다.
+	    * onNext(), onComplete() 호출할 수 있다.
 
 ### 2. Single: 1개의 data만 발행하도록 한정. 발행과 동시에 종료된다.
 * onSuccess(): 발행 및 종료 = onNext() + onComplete()
@@ -77,27 +78,27 @@
 		* ex) 마우스/키보드 이벤트, 시스템 이벤트, 센서 데이터, 주식 가격 등
 		* 주의) back pressure(배압)를 고려해야 함
 
-	Cold Observable >> | Subject 객체 생성           | >> Hot Observable
-	                   | ConnectableObservable 이용 |
+	Cold Observable >> | Subject 객체 생성 | OR | ConnectableObservable 이용 | >> Hot Observable
+	                   
 
 ### 5. Subject
 	5.1. AsyncSubject
-		* 완료되기 전 마지막 data만 관심
-		* onComplete() 와 동시에 data 발행 후 종료
-		* subscriber로도 동작가능
+	    * 완료되기 전 마지막 data만 관심
+	    * onComplete() 와 동시에 data 발행 후 종료
+	    * subscriber로도 동작가능
 
 	5.2. BehaviorSubject
-		* subscribe 전에 발행되었던 data중 가장 최근 것을 subscribe 직후 발행해줌
-		* createDefault()로 생성 >> Default: 최근 발행한 값이 없을 경우
-		* ex) 온도센서
+	    * subscribe 전에 발행되었던 data중 가장 최근 것을 subscribe 직후 발행해줌
+	    * createDefault()로 생성 >> Default: 최근 발행한 값이 없을 경우
+	    * ex) 온도센서
 
 	5.3. PublishSubject
-		* subscribe 이후부터 발행, 이전은 무시(Hot Observable의 기본개념)
+	    * subscribe 이후부터 발행, 이전은 무시(Hot Observable의 기본개념)
 
 	5.4. ReplaySubject
-		* Cold Observable과 유사
-		* Subscribe하는 구독자마다 처음부터 끝까지 모든 data 발행
-		* 모든 data를 저장해두어야 하는데 이때 Memory Leak 발생 가능성 있음
+	    * Cold Observable과 유사
+	    * Subscribe하는 구독자마다 처음부터 끝까지 모든 data 발행
+	    * 모든 data를 저장해두어야 하는데 이때 Memory Leak 발생 가능성 있음
 
 ### 6. ConnectableObservable
 * subscribe() + connect() 를 해야 발행된다.
