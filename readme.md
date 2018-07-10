@@ -8,7 +8,7 @@
 * JUnit5
 
 
-# Chapter 1
+# Chapter 1: 리액티브 프로그래밍 소개
 * RxJava는 비동기 프로그래밍 라이브러리이고 함수형 프로그래밍 기법을 도입하여 쓰레드에 안전
 * Hot/Cold Observable 개념과 클래스, map-filter-reduce 패턴과 함수를 알아야 한다. 물론 이것이 끝은 아니다.
 * 마블 다이어그램을 볼줄 알아야 한다.
@@ -19,7 +19,7 @@
         data -> System.out.println(data) 로 하위호환 할 수 있다.
 
 
-# Chapter 2
+# Chapter 2: Observable 처음 만들기
 ### 1. Observable 객체(구독할 대상)를 생성하는 방법: Factory Pattern
 	1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
 
@@ -104,3 +104,42 @@
 * subscribe() + connect() 를 해야 발행된다.
 * connect() 를 해서 이미 data가 발행되는 도중 subscribe가 들어오면 PublishSubject와 동일(subscribe 이후부터 발행, 이전은 무시)
 
+
+# Chapter 3 : 리액티브 연산자 입문
+* 언어에 따라 크게 다르지 않아서 RxJava가 익숙해지면 RxJS 등 다른 분야도 쉬울 수 있다.
+* Creating: create(), just(), fromArray(), interval(), range(), timer(), defer() 등
+* Transforming: map(), flatMap() 등
+* Fiter: filter(), first(), take() 등
+* Combining: 여러 Observable을 조합
+* Error Handling: onErrorReturn(), onErrorResumeNext(), retry() 등
+* Utility: subscribeOn(), observeOn() 등
+* Conditional: Observable의 흐름 제어
+* Math & Aggregate: 4장 참조
+* Back Pressure: 8장 참조
+
+### 1. map()
+>   * 입력값들이 함수(Function<T, R>)를 거쳐서 원하는 값으로 변환하는 함수 
+>   * Input : Output = 1 : 1
+>   * Python의 map()과 유사
+>   * ex) String to Integer
+
+### 2. flatMap()
+>   * 입력값들이 함수(Function<T, Observable<T>>)를 거쳐서 각각 원하는 Observable(여러개)로 치환되고 그것이 다시 일렬로 합쳐지는 함수
+>   * Input : Output = 1 : * (>= 1, 1 Observable)
+>   * Observable로 치환되었다가 다시 합쳐질때 병렬로 합쳐지므로 순서가 섞일 수 있음(대안: concatMap())
+
+### 3. filter()
+>   * 입력값들중에 함수(Predicate<T>)를 통해 True로 판별되는 아이템만 걸러내는 함수
+>   * Input : Output = 1 : a (<= 1)
+>   * 유사기능 함수
+>       * first(default value): 첫번째 값, 없으면 Default value를 사용
+>       * last(default value): 마지막 값, 없으면 Default value를 사용
+>       * take(N times): 앞에서부터 N개, data개수 < N 이면 data 모두 나옴(오류 안남)
+>       * takeLast(N times): 뒤에서부터 N개, data개수 < N 이면 data 모두 나옴(오류 안남)
+>       * skip(N times): 앞에서부터 N개 건너뜀, data개수 < N 이면 data 안나옴(오류 안남)
+>       * skipLast(N times): 뒤에서부터 N개 건너뜀, data개수 < N 이면 data 안나옴(오류 안남)
+
+### 4. reduce()
+>   * 입력값들을 함수(BiFunction<T, T, R>)를 통해 누적될 수 있도록 하는 함수
+>   * Input : Output = * : 1 (= Observable대신 Maybe를 반환한다)
+>   * BiFunction<T == prev, T == current, R = result>
