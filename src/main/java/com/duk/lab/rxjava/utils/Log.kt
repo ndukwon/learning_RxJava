@@ -14,5 +14,11 @@ class Log {
         fun println(obj: Any?) {
             System.out.println(getThreadName() + " | value = $obj")
         }
+
+        @JvmStatic
+        fun printlnWithTime(obj: Any?) {
+            val time = System.currentTimeMillis() - TimeUtil.startTime;
+            System.out.println(getThreadName() + " | $time | value = $obj")
+        }
     }
 }
