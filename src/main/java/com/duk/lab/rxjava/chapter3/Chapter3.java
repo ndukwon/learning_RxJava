@@ -1,15 +1,14 @@
 package com.duk.lab.rxjava.chapter3;
 
+import com.duk.lab.rxjava.utils.Log;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import kotlin.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Chapter3 {
 

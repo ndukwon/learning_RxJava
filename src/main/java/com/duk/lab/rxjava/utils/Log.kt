@@ -1,4 +1,4 @@
-package com.duk.lab.rxjava.chapter3
+package com.duk.lab.rxjava.utils
 
 class Log {
     companion object {

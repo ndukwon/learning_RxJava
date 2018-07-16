@@ -1,7 +1,7 @@
 package com.duk.lab.rxjava.chapter3
 
+import com.duk.lab.rxjava.utils.Log
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import java.util.ArrayList
 
 class Chapter3Kotlin {
