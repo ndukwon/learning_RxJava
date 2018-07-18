@@ -21,31 +21,25 @@
 
 # Chapter 2: Observable 처음 만들기
 ### 1. Observable 객체(구독할 대상)를 생성하는 방법: Factory Pattern
-	1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
-
-	1.2 create(): onNext(), OnError(), onComplete() 를 직접 호출해야 함
-        * 잠재적 Memory leak 주의: dispose할때 등록된 콜백을 모두 해지해야 함
-	    * subscribe 하는 동안만 onNext, onComplete 호출해야 함
-	    * 에러는 onError로만(Exception 안되나?)
-	    * 배압(back pressure) 직접 처리해야 함
-	
-	1.3. fromArray():
-	    * 선언부터 array 형태
-	    * int[] >> Integer[]로 변형해야 함
-	    * ArrayList는 iterable로 가야함
-
-	1.4. fromIterable(): list, set, queue 같은 Iterator를 구현해놓은 Collection 클래스
-	    * Map은 Iterator를 구현하지 않아서 X >> github에다가 fromMap() 도전해보길..
-
-	1.5. fromCallable(): Callable API(Java5) 사용시
-	    * Callable은 여러 쓰레드를 병렬로 돌리는 조건에서(ex:병렬계산) Thread를 직접 만들지 않고 쓸 수 있게 하는 기능, Runnable과 유사하지만 Return을 할 수 있다는 점에서 다르다.
-
-	1.6. fromFuture(): Future API(Java5) 사용시
-	    * Callable의 리턴값을 받아올때 사용.
-	    * get()하면 Callable이 리턴할때까지 블로킹 된다.
-
-	1.7. fromPublisher(): Flow API의 일부(Java9)
-	    * onNext(), onComplete() 호출할 수 있다.
+>	* 1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
+>   * 1.2. create(): onNext(), OnError(), onComplete() 를 직접 호출해야 함
+>       * 잠재적 Memory leak 주의: dispose할때 등록된 콜백을 모두 해지해야 함
+>       * subscribe 하는 동안만 onNext, onComplete 호출해야 함
+>       * 에러는 onError로만(Exception 안되나?)
+>       * 배압(back pressure) 직접 처리해야 함
+>   * 1.3. fromArray():
+>       * 선언부터 array 형태
+>       * int[] >> Integer[]로 변형해야 함
+>       * ArrayList는 iterable로 가야함
+>   * 1.4. fromIterable(): list, set, queue 같은 Iterator를 구현해놓은 Collection 클래스
+>       * Map은 Iterator를 구현하지 않아서 X >> github에다가 fromMap() 도전해보길..
+>   * 1.5. fromCallable(): Callable API(Java5) 사용시
+>       * Callable은 여러 쓰레드를 병렬로 돌리는 조건에서(ex:병렬계산) Thread를 직접 만들지 않고 쓸 수 있게 하는 기능, Runnable과 유사하지만 Return을 할 수 있다는 점에서 다르다.
+>   * 1.6. fromFuture(): Future API(Java5) 사용시
+>       * Callable의 리턴값을 받아올때 사용.
+>       * get()하면 Callable이 리턴할때까지 블로킹 된다.
+>   * 1.7. fromPublisher(): Flow API의 일부(Java9)
+>       * onNext(), onComplete() 호출할 수 있다.
 
 ### 2. Single: 1개의 data만 발행하도록 한정. 발행과 동시에 종료된다.
 * onSuccess(): 발행 및 종료 = onNext() + onComplete()
@@ -82,23 +76,20 @@
 	                   
 
 ### 5. Subject
-	5.1. AsyncSubject
-	    * 완료되기 전 마지막 data만 관심
-	    * onComplete() 와 동시에 data 발행 후 종료
-	    * subscriber로도 동작가능
-
-	5.2. BehaviorSubject
-	    * subscribe 전에 발행되었던 data중 가장 최근 것을 subscribe 직후 발행해줌
-	    * createDefault()로 생성 >> Default: 최근 발행한 값이 없을 경우
-	    * ex) 온도센서
-
-	5.3. PublishSubject
-	    * subscribe 이후부터 발행, 이전은 무시(Hot Observable의 기본개념)
-
-	5.4. ReplaySubject
-	    * Cold Observable과 유사
-	    * Subscribe하는 구독자마다 처음부터 끝까지 모든 data 발행
-	    * 모든 data를 저장해두어야 하는데 이때 Memory Leak 발생 가능성 있음
+>	* 5.1. AsyncSubject
+>       * 완료되기 전 마지막 data만 관심
+>       * onComplete() 와 동시에 data 발행 후 종료
+>       * subscriber로도 동작가능
+>   * 5.2. BehaviorSubject
+>       * subscribe 전에 발행되었던 data중 가장 최근 것을 subscribe 직후 발행해줌
+>       * createDefault()로 생성 >> Default: 최근 발행한 값이 없을 경우
+>       * ex) 온도센서
+>   * 5.3. PublishSubject
+>       * subscribe 이후부터 발행, 이전은 무시(Hot Observable의 기본개념)
+>   * 5.4. ReplaySubject
+>       * Cold Observable과 유사
+>       * Subscribe하는 구독자마다 처음부터 끝까지 모든 data 발행
+>       * 모든 data를 저장해두어야 하는데 이때 Memory Leak 발생 가능성 있음
 
 ### 6. ConnectableObservable
 * subscribe() + connect() 를 해야 발행된다.
@@ -143,3 +134,48 @@
 >   * 입력값들을 함수(BiFunction<T, T, R>)를 통해 누적될 수 있도록 하는 함수
 >   * Input : Output = * : 1 (= Observable대신 Maybe를 반환한다)
 >   * BiFunction<T == prev, T == current, R = result>
+
+
+# Chapter 4 : 리액티브 연산자의 활용
+### 1. 생성 연산자
+>   * 1.1. Observable.interval(초기 Delay(Default==시간간격), 시간간격, 시간단위):
+>       * 지정 시간 간격으로 data: 0L++ 발행(default==영원히)
+>       * Thread: Computation scheduler
+>   * 1.2. Observable.timer(Delay, 시간단위):
+>       * 지정 시간 후에 data: 0L 한번만 발행
+>       * Thread: Computation scheduler
+>   * 1.3. Observable.range(초기값 start, 반복횟수 count):
+>       * start, start + 1, start + 2, ... start + count - 1 까지 증가시키며 발행
+>       * Thread: None
+>   * 1.4. Observable.intervalRange():
+>       * interval() + range() : 범위안에 간격을 두어 발행
+>       * Thread: Computation scheduler
+>   * 1.5. Observable.defer():
+>       * Observable대신 data가 담긴 Observable을 생성할 수 있는 Callable 받아서 subscribe 이후에 (반복)생성 후 발행
+>       * Thread: None
+>   * 1.6. observe.repeat(count (default=infinite)): data가 끝나면 다시 create
+>       * data를 onComplete() 없이 계속 처음부터 (count 만큼) 반복 발행, 반복횟수가 끝나야 onComplete() 된다
+>       * Thread: None 이지만 create를 하는 함수의 Thread 방식을 따른다.
+>       * timer() + repeat() = thread가 매번 다른 interval()
+
+### 2. 변환 연산자
+>   * 2.1. concatMap(item -> Observable):
+>       * Input : Output = 1 : * (>= 1, 1 Observable)
+>       * flatMap() 과 유사하지만 각각의 item들이 부르는 Observable들을 차례차례 실행시켜서 interleaving(=병렬로 처리되어 중간에 끼워지는 현상) 없이 들어간다.
+>       * data 발행, 구독 전달 Thread를 각각 다르게 사용한다. Thread 1: data 발행, Thread 2~ : 구독 전달
+>   * 2.2. switchMap(item -> Observable):
+>       * Input : Output = 1 : * (<>= 1)
+>       * flatMap(), concatMap()과 유사하지만 다음 item이 들어오면 이전 item이 만들던 Observable을 중단시키고 병합시키지도 않음
+>       * data 발행, 구독 전달 Thread를 각각 다르게 사용한다. Thread 1: data 발행, Thread 2~ : 구독 전달
+>       * ex) 센서 값 얻어와서 처리하는 경우
+>   * 2.3. groupBy(Function<>):
+>       * Input : Output = N : M = 전체가 몇개의 그룹으로 묶여지며 이들은 다시 합쳐지지 않고 M개 그룹의 Observable로 발행된다.
+>       * 그룹을 구분할 조건식을 넣으면 각 해당하는 그룹 Observable이 생성된다. 즉, 모든 아이템이 group으로 묶어지며 그룹 각각이 item(Observable)으로 된다.
+>       * 각각 발행되는 item들을 subscribe 해야한다.
+>   * 2.4. scan():
+>       * Input : Output = 1 : 1
+>       * reduce()와 거의 유사하지만 reduce()는 N:1 대응 결과값인 반면, scan()은 중간전달값도 발행한다.
+
+### 3. 결합 연산자
+### 4. 조건 연산자
+### 5. 수학 및 기타 연산자
