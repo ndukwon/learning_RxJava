@@ -20,5 +20,11 @@ class Log {
             val time = System.currentTimeMillis() - TimeUtil.startTime;
             System.out.println(getThreadName() + " | $time | value = $obj")
         }
+
+        @JvmStatic
+        fun debugWithTime(obj: Any?) {
+            val time = System.currentTimeMillis() - TimeUtil.startTime;
+            System.out.println(getThreadName() + " | $time | debug : $obj")
+        }
     }
 }

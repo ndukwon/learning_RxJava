@@ -30,6 +30,9 @@ dependencies {
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
+    // OkHttp
+    compile 'com.squareup.okhttp3:okhttp:3.11.0'
+
     /* JUnit5
         - Help: https://junit.org/junit5/docs/current/user-guide/#overview-what-is-junit-5
         - Version: https://github.com/junit-team/junit5/

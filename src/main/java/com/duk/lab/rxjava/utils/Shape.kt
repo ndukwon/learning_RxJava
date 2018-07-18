@@ -4,5 +4,6 @@ enum class Shape {
     BALL,
     RECTANGLE,
     PENTAGON,
-    DIAMOND
+    DIAMOND,
+    TRIANGLE
 }
