@@ -7,6 +7,7 @@ import com.duk.lab.rxjava.utils.TimeUtil;
 import io.reactivex.Observable;
 import kotlin.Pair;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -441,6 +442,135 @@ public class Chapter4 {
         main | value = 1
         main | value = 3(1)
         main | value = 5(3(1))
+         */
+    }
+
+    /*
+        zip()
+     */
+    public void ex22_zip() {
+        Shape[] shapes = {Shape.BALL, Shape.DIAMOND, Shape.PENTAGON};
+        Integer[] numbers = {1, 2, 3};
+
+        Observable.zip(
+                Observable.fromArray(shapes).map(item -> item.name()),
+                Observable.fromArray(numbers),
+                (item1, item2) -> item1 + "-" + item2
+        ).subscribe(Log::println);
+
+        /*
+        main | value = BALL-1
+        main | value = DIAMOND-2
+        main | value = PENTAGON-3
+         */
+    }
+
+    // ex23 are unnecessary.
+
+    public void ex24_zipForSummation() {
+        Observable.zip(
+                Observable.just(100, 200, 300),
+                Observable.just(10, 20, 30),
+                Observable.just(1, 2, 3),
+                (a, b, c) -> a+b+c
+        ).subscribe(Log::println);
+
+        /*
+        main | value = 111
+        main | value = 222
+        main | value = 333
+         */
+    }
+
+    public void ex25_zipWithInterval() {
+        TimeUtil.setStartTime();
+        Observable.zip(
+                Observable.just("RED", "GREEN", "BLUE"),
+                Observable.interval(200L, TimeUnit.MILLISECONDS),
+                (value, notUsed) -> value
+        ).subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-1 | 229 | value = RED
+        RxComputationThreadPool-1 | 432 | value = GREEN
+        RxComputationThreadPool-1 | 629 | value = BLUE
+         */
+    }
+
+    // ex26 are unnecessary.
+
+    /**
+     * Electric Bill is made with "basic" rate and "section" rate
+     * 1. Basic rate: the usage is
+     *  <= 200 : 910
+     *  <= 400 : 1,600
+     *  > 400 : 7,300
+     *
+     * 2. Section rate: the range part of the usage is
+     *  <= 200 : 93.3
+     *  <= 400 : 187.9
+     *  > 400 : 280.6
+     */
+    public void ex27_zipForElectricBills() {
+        Integer[] data = {
+                100,        // Basic: 910 + Section: 93.3 * 100 = 10,240
+                300,        // Basic: 1600 + Sections: 93.3 * 200 + 187.9 * 100 = 39,050
+                500         // Basic: 7300 + Sections: 93.3 * 200 + 187.9 * 200 + 280.6 * 100 = 7300 + 18660 + 37580 + 28060
+        };
+
+        Observable<Integer> basicPrice = Observable.fromArray(data)
+                .map(usage -> {
+                    if (usage <= 200) return 910;
+                    else if (usage <= 400) return 1600;
+                    else return 7300;
+                });
+
+        Observable<Double> sectionPrice = Observable.fromArray(data)
+                .map(usage -> {
+                    double section1 = Math.min(200, usage) * 93.3;
+                    double section2 = Math.min(200, Math.max(usage - 200, 0)) * 187.9;
+                    double section3 = Math.max(0, usage - 400) * 280.6;
+
+                    return section1 + section2 + section3;
+                });
+
+        Observable.zip(
+                basicPrice,
+                sectionPrice,
+                Observable.fromArray(data),
+                (item1, item2, item3) -> new Pair(item3, new DecimalFormat("#,###").format(item1 + item2))
+        ).map(
+                pair -> {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Usage: ").append(pair.getFirst()).append(" kWh");
+                    sb.append(" => ");
+                    sb.append("Price: ").append(pair.getSecond()).append("KRW");
+                    return sb.toString();
+                }
+        ).subscribe(Log::println);
+
+        /*
+        main | value = Usage: 100 kWh => Price: 10,240KRW
+        main | value = Usage: 300 kWh => Price: 39,050KRW
+        main | value = Usage: 500 kWh => Price: 91,600KRW
+         */
+    }
+
+    public void ex28_zipWith() {
+        Observable.zip(
+                Observable.just(100, 200, 300),
+                Observable.just(10, 20, 30),
+//                Observable.just(1, 2, 3),
+                (a, b) -> a + b
+        ).zipWith(Observable.just(1, 2, 3), (x, c) -> x + c)
+                .subscribe(Log::println);
+
+        /*
+        main | value = 111
+        main | value = 222
+        main | value = 333
          */
     }
 }

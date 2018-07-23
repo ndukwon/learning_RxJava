@@ -123,4 +123,25 @@ public class Chapter4Test {
         System.out.println("Test scan() Example 21");
         chapter4.ex21_scan();
     }
+
+    @DisplayName("Test zip() Examples")
+    @Test
+    void test_zip() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test zip() Example 22");
+        chapter4.ex22_zip();
+
+        System.out.println("Test zip() Example 24");
+        chapter4.ex24_zipForSummation();
+
+        System.out.println("Test zip() Example 25");
+        chapter4.ex25_zipWithInterval();
+
+        System.out.println("Test zip() Example 27");
+        chapter4.ex27_zipForElectricBills();
+
+        System.out.println("Test zip() Example 28");
+        chapter4.ex28_zipWith();
+    }
 }
