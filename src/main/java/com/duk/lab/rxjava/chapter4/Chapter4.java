@@ -5,6 +5,9 @@ import com.duk.lab.rxjava.utils.OkHttpHelper;
 import com.duk.lab.rxjava.utils.Shape;
 import com.duk.lab.rxjava.utils.TimeUtil;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.functions.Action;
+import io.reactivex.observables.ConnectableObservable;
 import kotlin.Pair;
 
 import java.text.DecimalFormat;
@@ -12,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Chapter4 {
@@ -558,6 +562,9 @@ public class Chapter4 {
          */
     }
 
+    /*
+        zipWith()
+     */
     public void ex28_zipWith() {
         Observable.zip(
                 Observable.just(100, 200, 300),
@@ -572,5 +579,251 @@ public class Chapter4 {
         main | value = 222
         main | value = 333
          */
+    }
+
+    /*
+        combineLatest()
+     */
+    /**
+     * Time schedule
+     * ms       A       B           combineLatest
+     * 100      6       -           -
+     * 150      -       DIAMOND     6-DIAMOND
+     * 200      7       -           7-DIAMOND
+     * 300(A)   4       -           4-DIAMOND
+     * 300(B)   -       STAR        4-STAR
+     * 400      2       -           2-STAR
+     * 450      -       PENTAGON    2-PENTAGON
+     */
+    public void ex29_combineLatest() {
+        Integer[] data1 = {6, 7, 4, 2};
+        Shape[] data2 = {Shape.DIAMOND, Shape.STAR, Shape.PENTAGON};
+
+        TimeUtil.setStartTime();
+        Observable.combineLatest(
+                Observable.fromArray(data1)
+                        .zipWith(Observable.interval(100L, TimeUnit.MILLISECONDS), (color, notUsed) -> color),
+                Observable.fromArray(data2)
+                        .zipWith(Observable.interval(150L, TimeUnit.MILLISECONDS), (shape, notUsed) -> shape),
+                (item1, item2) -> item1.toString() + "-" + item2.name()
+        ).subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-2 | 478 | value = 6-DIAMOND
+        RxComputationThreadPool-1 | 529 | value = 7-DIAMOND
+        RxComputationThreadPool-1 | 624 | value = 4-DIAMOND
+        RxComputationThreadPool-2 | 625 | value = 4-STAR
+        RxComputationThreadPool-1 | 729 | value = 2-STAR
+        RxComputationThreadPool-2 | 777 | value = 2-PENTAGON
+         */
+    }
+
+    public void ex30_ex29_combineLatestForMS_Excel() {
+
+        // Continuous Input part
+        ConnectableObservable<String> source = Observable.create(
+                (ObservableEmitter<String> emitter) -> {
+                    Scanner in = new Scanner(System.in);
+                    while (true) {
+                        System.out.println("Input: ");
+                        String line = in.nextLine();
+
+                        if (line.contains("exit")) {
+                            in.close();
+                            break;
+                        }
+
+                        emitter.onNext(line);
+                    }
+                }
+        ).publish();
+
+        // process part
+        Observable.combineLatest(
+                source.filter(str -> str.startsWith("a:"))
+                        .map(str -> str.replace("a:", ""))
+                        .map(Integer::parseInt)
+                        .startWith(0),
+                source.filter(str -> str.startsWith("b:"))
+                        .map(str -> str.replace("b:", ""))
+                        .map(Integer::parseInt)
+                        .startWith(0),
+                (a, b) -> a+b
+        ).subscribe(result -> Log.println("Result: " + result));
+
+        // start
+        source.connect();
+
+        /*
+        main | value = Result: 0
+        Input: a:100
+        main | value = Result: 100
+        Input: b:2020
+        main | value = Result: 2120
+        Input: a:300
+        main | value = Result: 2320
+        Input: b:30
+        main | value = Result: 330
+        Input:
+         */
+    }
+
+    /*
+        merge()
+     */
+    public void ex31_merge() {
+        Integer[] data1 = {1, 3};
+        Integer[] data2 = {2, 4, 6};
+
+        TimeUtil.setStartTime();
+        Observable.merge(
+                Observable.interval(0L, 100L, TimeUnit.MILLISECONDS)
+                        .zipWith(Observable.fromArray(data1), (notUsed, item) -> item),
+                Observable.interval(50L, 100L, TimeUnit.MILLISECONDS)
+                        .zipWith(Observable.fromArray(data2), (notUsed, item) -> item)
+        ).subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-3 | 4 | value = 1
+        RxComputationThreadPool-4 | 57 | value = 2
+        RxComputationThreadPool-3 | 106 | value = 3
+        RxComputationThreadPool-4 | 156 | value = 4
+        RxComputationThreadPool-4 | 254 | value = 6
+         */
+    }
+
+    /*
+        concat()
+     */
+    public void ex32_concat() {
+        Integer[] data1 = {1, 3, 5};
+        Integer[] data2 = {2, 4, 6};
+
+        TimeUtil.setStartTime();
+        Observable.concat(
+                Observable.fromArray(data1)
+                        .zipWith(Observable.interval(100L, TimeUnit.MILLISECONDS), (item1, notUsed) -> item1)
+                        .doOnComplete(() -> Log.println("data1 is onComplete()")),
+                Observable.fromArray(data2)
+//                        .zipWith(Observable.interval(100L, TimeUnit.MILLISECONDS), (item1, notUsed) -> item1)
+                        .doOnComplete(() -> Log.println("data2 is onComplete()"))
+        ).doOnComplete(() -> Log.println("concat is onComplete()"))
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-1 | 527 | value = 1
+        RxComputationThreadPool-1 | 622 | value = 3
+        RxComputationThreadPool-1 | 722 | value = 5
+        RxComputationThreadPool-1 | value = data1 is onComplete()
+        RxComputationThreadPool-1 | 722 | value = 2
+        RxComputationThreadPool-1 | 722 | value = 4
+        RxComputationThreadPool-1 | 722 | value = 6
+        RxComputationThreadPool-1 | value = data2 is onComplete()
+        RxComputationThreadPool-1 | value = concat is onComplete()
+         */
+    }
+
+    /*
+        amb()
+     */
+    public void ex33_amb() {
+        Integer[] data1 = {1, 3, 5};
+        Integer[] data2 = {2, 4, 6};
+
+        TimeUtil.setStartTime();
+        Observable.amb(Arrays.asList(
+                Observable.fromArray(data1)
+                        .delay(150L, TimeUnit.MILLISECONDS)
+                        .doOnComplete(() -> Log.println("data1 is onComplete()")),
+                Observable.fromArray(data2)
+                        .delay(100L, TimeUnit.MILLISECONDS)
+                        .doOnComplete(() -> Log.println("data2 is onComplete()"))
+        )).doOnComplete(() -> Log.println("amb is onComplete()"))
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-2 | 327 | value = 2
+        RxComputationThreadPool-2 | 329 | value = 4
+        RxComputationThreadPool-2 | 329 | value = 6
+        RxComputationThreadPool-2 | value = data2 is onComplete()
+        RxComputationThreadPool-2 | value = amb is onComplete()
+         */
+    }
+
+    /*
+        takeUntil()
+     */
+    public void ex34_takeUntil() {
+        String[] data = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
+        TimeUtil.setStartTime();
+        Observable.fromArray(data)
+                .zipWith(Observable.interval(10L, TimeUnit.MILLISECONDS), (item1, notUsed) -> item1)
+                .takeUntil(Observable.timer(50L, TimeUnit.MILLISECONDS))
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-2 | 333 | value = A
+        RxComputationThreadPool-2 | 338 | value = B
+        RxComputationThreadPool-2 | 349 | value = C
+        RxComputationThreadPool-2 | 358 | value = D
+         */
+    }
+
+    /*
+        skipUntil()
+     */
+    public void ex35_skipUntil() {
+        String[] data = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
+        TimeUtil.setStartTime();
+        Observable.fromArray(data)
+                .zipWith(Observable.interval(10L, TimeUnit.MILLISECONDS), (item1, notUsed) -> item1)
+                .skipUntil(Observable.timer(50L, TimeUnit.MILLISECONDS))
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-4 | 65 | value = F
+        RxComputationThreadPool-4 | 76 | value = G
+        RxComputationThreadPool-4 | 85 | value = H
+        RxComputationThreadPool-4 | 96 | value = I
+         */
+    }
+
+    /*
+        all()
+     */
+    public void ex36_all() {
+//        Shape[] shapes = {Shape.BALL, Shape.BALL, Shape.BALL, Shape.BALL, Shape.BALL, Shape.BALL};
+        Shape[] shapes = {Shape.BALL, Shape.BALL, Shape.DIAMOND, Shape.BALL, Shape.BALL, Shape.BALL};
+
+        // data
+        Observable<Pair<Integer, Shape>> source = Observable.zip(
+                Observable.range(1, 5),
+                Observable.fromArray(shapes),
+                (item1, item2) -> new Pair(item1, item2)
+        );
+
+        //
+        source.all(item -> Shape.BALL.equals(item.getSecond()))
+                .subscribe(Log::println);
+
+        /*
+        main | value = false
+         */
+    }
+
+    public void ex37_() {
+
     }
 }

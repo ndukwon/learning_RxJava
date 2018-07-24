@@ -3,6 +3,8 @@ package com.duk.lab.rxjava.chapter4;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+
 public class Chapter4Test {
 
     @DisplayName("Test interval() Examples")
@@ -143,5 +145,75 @@ public class Chapter4Test {
 
         System.out.println("Test zip() Example 28");
         chapter4.ex28_zipWith();
+    }
+
+    @DisplayName("Test combineLatest() Examples")
+    @Test
+    void test_combineLatest() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test combineLatest() Example 29");
+        chapter4.ex29_combineLatest();
+
+        System.out.println("Test combineLatest() Example 30");
+        StringBuilder inputSb = new StringBuilder();
+        inputSb.append("a:100").append("\n")
+                .append("b:2020").append("\n")
+                .append("a:300").append("\n")
+                .append("b:30").append("\n")
+                .append("exit");
+        ByteArrayInputStream in = new ByteArrayInputStream(inputSb.toString().getBytes());
+        System.setIn(in);
+        chapter4.ex30_ex29_combineLatestForMS_Excel();
+
+        System.setIn(System.in);
+    }
+
+    @DisplayName("Test merge() Examples")
+    @Test
+    void test_merge() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test merge() Example 31");
+        chapter4.ex31_merge();
+    }
+
+    @DisplayName("Test concat() Examples")
+    @Test
+    void test_concat() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test concat() Example 32");
+        chapter4.ex32_concat();
+    }
+
+    @DisplayName("Test amb() Examples")
+    @Test
+    void test_amb() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test amb() Example 33");
+        chapter4.ex33_amb();
+    }
+
+    @DisplayName("Test take/skipUntil() Examples")
+    @Test
+    void test_takeUntil_skipUntil() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test take/skipUntil() Example 34");
+        chapter4.ex34_takeUntil();
+
+        System.out.println("Test take/skipUntil() Example 35");
+        chapter4.ex35_skipUntil();
+    }
+
+    @DisplayName("Test all() Examples")
+    @Test
+    void test_all() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test all() Example 36");
+        chapter4.ex36_all();
     }
 }
