@@ -207,5 +207,14 @@
 
 ### 5. 수학 및 기타 연산자
 >   * 5.1. 수학함수
->   * 5.2. delay()
+>       * observable.count(): 개수를 센다.
+>       * flowable.max(): max를 찾는다. Flowable로 반환된다.
+>       * flowable.min(): min를 찾는다. Flowable로 반환된다.
+>       * flowable.sum(): sum을 구한다. Flowable로 반환된다.
+>       * flowable.average(): average를 구한다. Flowable로 반환된다.
+>   * 5.2. delay():
+>       * 발행의 시작을 Delay 시킨다.
+>       * Thread: Computation scheduler
 >   * 5.3. timeInterval()
+>       * item을 발행할때, 이전 발행과의 시간차이도 알려줌. 최초발행은 subscribe() 시점부터...
+>       * item이 시간정보를 포함한 Timed 객체에 담기어 발행된다.
