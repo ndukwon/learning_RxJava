@@ -33,6 +33,9 @@ dependencies {
     // OkHttp
     compile 'com.squareup.okhttp3:okhttp:3.11.0'
 
+    // Rx Math
+    compile 'com.github.akarnokd:rxjava2-extensions:0.17.6'
+
     /* JUnit5
         - Help: https://junit.org/junit5/docs/current/user-guide/#overview-what-is-junit-5
         - Version: https://github.com/junit-team/junit5/
