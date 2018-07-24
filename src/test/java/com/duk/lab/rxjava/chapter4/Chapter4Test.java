@@ -216,4 +216,31 @@ public class Chapter4Test {
         System.out.println("Test all() Example 36");
         chapter4.ex36_all();
     }
+
+    @DisplayName("Test Math Examples")
+    @Test
+    void test_math() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test Math Example 37");
+        chapter4.ex37_mathExamples();
+    }
+
+    @DisplayName("Test delay Examples")
+    @Test
+    void test_delay() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test delay Example 38");
+        chapter4.ex38_delay();
+    }
+
+    @DisplayName("Test timeInterval Examples")
+    @Test
+    void test_timeInterval() {
+        Chapter4 chapter4 = new Chapter4();
+
+        System.out.println("Test timeInterval Example 39");
+        chapter4.ex39_timeInterval();
+    }
 }

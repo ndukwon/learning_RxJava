@@ -4,6 +4,9 @@ import com.duk.lab.rxjava.utils.Log;
 import com.duk.lab.rxjava.utils.OkHttpHelper;
 import com.duk.lab.rxjava.utils.Shape;
 import com.duk.lab.rxjava.utils.TimeUtil;
+import hu.akarnokd.rxjava2.math.MathFlowable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.functions.Action;
@@ -823,7 +826,81 @@ public class Chapter4 {
          */
     }
 
-    public void ex37_() {
+    public void ex37_mathExamples() {
+        String[] data = {"1", "2", "4", "5"};
+        Observable<String> source = Observable.fromArray(data);
+        Flowable<Integer> sourceFlowable = source.map(Integer::parseInt).toFlowable(BackpressureStrategy.BUFFER);
 
+        // 1. count()
+        source.count().subscribe(count -> Log.println("count is " + count));
+
+        // 2. max()
+        sourceFlowable.to(MathFlowable::max)
+                .subscribe(max -> Log.println("max is " + max));
+
+        // 3. min()
+        sourceFlowable.to(MathFlowable::min)
+                .subscribe(min -> Log.println("min is " + min));
+
+        // 4. sum()
+        sourceFlowable.to(MathFlowable::sumInt)
+                .subscribe(sum -> Log.println("sum is " + sum));
+
+        // 5. average()
+        sourceFlowable.to(MathFlowable::averageDouble)
+                .subscribe(avg -> Log.println("average is " + avg));
+
+        /*
+        main | value = count is 4
+        main | value = max is 5
+        main | value = min is 1
+        main | value = sum is 12
+        main | value = average is 3.0
+         */
     }
+
+    /*
+        delay()
+     */
+    public void ex38_delay() {
+        Integer[] data = {1, 7, 2, 3, 4};
+
+        TimeUtil.setStartTime();
+        Observable.fromArray(data)
+                .delay(100L, TimeUnit.MILLISECONDS)
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxComputationThreadPool-1 | 337 | value = 1
+        RxComputationThreadPool-1 | 340 | value = 7
+        RxComputationThreadPool-1 | 340 | value = 2
+        RxComputationThreadPool-1 | 340 | value = 3
+        RxComputationThreadPool-1 | 340 | value = 4
+         */
+    }
+
+    public void ex39_timeInterval() {
+        Integer[] data = {1, 3, 7};
+
+        TimeUtil.setStartTime();
+        Observable.fromArray(data)
+                .delay(item -> {
+                    TimeUtil.doSomething();
+                    return Observable.just(item);
+                })
+                .timeInterval()
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        main | 400 | value = Timed[time=44, unit=MILLISECONDS, value=1]
+        main | 454 | value = Timed[time=56, unit=MILLISECONDS, value=3]
+        main | 483 | value = Timed[time=29, unit=MILLISECONDS, value=7]
+         */
+    }
+
+    // ex40 are unnecessary.
 }
