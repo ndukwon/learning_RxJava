@@ -177,5 +177,35 @@
 >       * reduce()와 거의 유사하지만 reduce()는 N:1 대응 결과값인 반면, scan()은 중간전달값도 발행한다.
 
 ### 3. 결합 연산자
+>   * 3.1. Observable.zip(Observable..., BiFuction)
+>       * 두개 이상의 Observable 각각에서 나오는 item들을(Cold: index가 같은것 끼리, Hot: ??) 하나의 묶음으로 만들고
+>           이 묶음을 BiFuction에서 하나의 Return으로 만들어 주는 처리를 할 수 있게 한다.
+>       * Input : Output = (n, m) : n (if n < m) = item이 많은 m쪽의 나머지는 결합할 다른쪽 item이 없기에 발행되지 않는다.
+>       * zipInterval 기법: interval과 결합하여 item이 시간간격을 두고 발행될 수 있게 한다. 결과는 Computation Thread에서 발행
+>   * 3.2. Observable.combineLatest(Observable...)
+>       * 두개 이상의 Observable(최대 9개)에서 각각 item들이 발행될때 마다 결합시켜 발행시키는데, 발행안된 쪽은 가장 최신에 발행했던 item과 결합시켜 발행
+>       * item이 발행된 적이 없는 상황에서는 결합시킬 최신이 없으므로 결합 발행이 되지 않는다. startWith()를 넣으면 초기값이 설정되므로 처음부터 발행될 수 있다.
+>   * 3.3. Observable.merge(Observable...)
+>       * 여러개의 Observable에서 발행된 순서대로 단순하게 합쳐서 1열로 만든다.
+>   * 3.4. Observable.concat(Observable...)
+>       * 여러개의 Observable의 끝과 시작을 이어준다. onComplete() 기준으로 이어줌
+>       * A, B Observable을 이어줄때 A에서 onComplete()이 발생하지 않으면 B는 영원히 대기하게 되어 잠재적인 Memory leak 위험이 있다.
+
 ### 4. 조건 연산자
+>   * 4.1. Observable.amb(Iterable<Observable>): Observable 여러개를 list형태로 받는다.
+>       * 여러개의 Observable 중에서 먼저 발행되는 단 하나의 Observable만 발행하고 나머지 Observable은 무시함
+>   * 4.2. source.takeUntil(condition: Observable)
+>       * source를 발행하다가 주어진 condition Observable이 발행을 하나라도 하면 기존 source 발행은 중단한다.
+>       * timer()와 함께 활용 편리
+>   * 4.3. source.skipUntil(condition: Observable)
+>       * source를 발행하지 않다가 주어진 condition Observable이 발행을 하나라도 하면 기존 observable 발행을 시작한다.
+>       * takeUntil()과 반대의 상황
+>       * timer()와 함께 활용 편리
+>   * 4.4. source.all(Predicate) -> Single
+>       * source의 모든 item들이 주어진 Predicate를 true로 통과하면, 단 하나의 true를 발행
+>       * item중 Pradicate를 false로 통과하는게 단 하나라도 있다면, 단 하나의 false를 발행
+
 ### 5. 수학 및 기타 연산자
+>   * 5.1. 수학함수
+>   * 5.2. delay()
+>   * 5.3. timeInterval()
