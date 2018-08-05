@@ -218,3 +218,32 @@
 >   * 5.3. timeInterval()
 >       * item을 발행할때, 이전 발행과의 시간차이도 알려줌. 최초발행은 subscribe() 시점부터...
 >       * item이 시간정보를 포함한 Timed 객체에 담기어 발행된다.
+
+# Chapter 5. Scheduler
+### 1. Scheduler 개념 배우기
+>   * subscribeOn(Scheduler): 어떤 Thread Scheduler로 구독할 것인지 정한다.
+>   * observeOn(Scheduler): 어떤 Thread Scheduler로 item을 받아올 것인지 정한다.
+>   * 대부분 함수는 호출시 Scheduler를 인자로 받을 수 있는 구조이지만 flatMap(), scan() 함수 등은 Scheduler를 인자로 받지 않는다.
+
+### 2. Scheduler 종류
+>   * 2.1. Schedulers.newThread()
+>       * Thread 요청을 받을 때마다 새로운 Thread를 생성
+>       * 다른 Thread가 활용도가 더 높은편이기 때문에 특수한 상황에서의 원할때 사용을 권장
+>   * 2.2. Schedulers.computation()
+>       * 일반적인 계산 작업
+>       * 내부적으로 Thread pool을 생성: Thread 개수 == CPU processor 개수
+>   * 2.3. Schedulers.io()
+>       * 네크워크상의 요청, 파일 입출력, DB쿼리 등
+>       * 
+>   * 2.4. Schedulers.trampoline()
+>   * 2.5. Schedulers.single()
+>   * 2.6. Schedulers.from(Executor)
+
+### 3. 스케줄러를 활용하여 콜백 지옥 벗어나기
+
+### 4. observeOn()
+
+# Chapter 6. 안드로이드의 RxJava 활용
+# Chapter 7. 디버깅과 예외 처리
+# Chapter 8. 테스팅과 Flowable
+
