@@ -232,12 +232,17 @@
 >   * 2.2. Schedulers.computation()
 >       * 일반적인 계산 작업
 >       * 내부적으로 Thread pool을 생성: Thread 개수 == CPU processor 개수
+>       * Round Robin 방식의 Thread pool 운용
 >   * 2.3. Schedulers.io()
 >       * 네크워크상의 요청, 파일 입출력, DB쿼리 등
->       * 
+>       * 필요할때 마다 계속 생성함
 >   * 2.4. Schedulers.trampoline()
+>       * 새로운 Thread를 생성하지 않고 기존 Thread에 대기행렬을 만들어준다.
 >   * 2.5. Schedulers.single()
+>       * 별도의 Single Thread에서 처리. 그 이후에도 같은 Thread를 계속 쓴다.
 >   * 2.6. Schedulers.from(Executor)
+>       * java.util.concurrent.Executor에 기반한 Thread를 사용
+>       * Rx의 Scheduler와 다르기 때문에 비추. 기존에 사용하던 Executor를 재사용할 때 한정적으로 활용.
 
 ### 3. 스케줄러를 활용하여 콜백 지옥 벗어나기
 
