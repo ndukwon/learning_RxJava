@@ -37,4 +37,43 @@ class Chapter5Test {
         println("Test Schedulers.computation() Example 5")
         chapter5.ex5_computationScheduler()
     }
+
+    @DisplayName("Test Schedulers.io() Examples")
+    @Test
+    internal fun test_io() {
+        val chapter5 = Chapter5()
+
+        println("Test Schedulers.io() Example 6")
+        chapter5.ex6_ioScheduler()
+    }
+
+    @DisplayName("Test Schedulers.trampoline() Examples")
+    @Test
+    internal fun test_trampoline() {
+        val chapter5 = Chapter5()
+
+        println("Test Schedulers.trampoline() Example 7")
+        chapter5.ex7_trampolineScheduler()
+
+        println("Test Schedulers.trampoline() Example 7-2")
+        chapter5.ex7_trampolineScheduler2()
+    }
+
+    @DisplayName("Test Schedulers.single() Examples")
+    @Test
+    internal fun test_single() {
+        val chapter5 = Chapter5()
+
+        println("Test Schedulers.single() Example 8")
+        chapter5.ex8_singleScheduler()
+    }
+
+    @DisplayName("Test Schedulers.from(Executor) Examples")
+    @Test
+    internal fun test_from_Executor() {
+        val chapter5 = Chapter5()
+
+        println("Test Schedulers.from(Executor) Example 9")
+        chapter5.ex9_fromExecutorScheduler()
+    }
 }

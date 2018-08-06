@@ -1,11 +1,15 @@
 package com.duk.lab.rxjava.chapter5;
 
 import com.duk.lab.rxjava.utils.Log;
+import com.duk.lab.rxjava.utils.StringUtil;
 import com.duk.lab.rxjava.utils.TimeUtil;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.io.File;
 import java.sql.Time;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Chapter5 {
@@ -158,6 +162,165 @@ public class Chapter5 {
         io()
      */
     public void ex6_ioScheduler() {
+        String root = "/";
+        Observable.fromArray(new File(root).listFiles())
+                .doOnNext(item -> Log.println("item =" + item))
+                .filter(f -> !f.isDirectory())
+                .map(f -> f.getAbsolutePath())
+                .subscribeOn(Schedulers.io())
+                .subscribe(Log::println);
 
+        TimeUtil.sleep(500);
+
+        /*
+        RxCachedThreadScheduler-1 | value = item =/.HFS+ Private Directory Data
+        RxCachedThreadScheduler-1 | value = item =/home
+        RxCachedThreadScheduler-1 | value = item =/usr
+        RxCachedThreadScheduler-1 | value = item =/.Spotlight-V100
+        RxCachedThreadScheduler-1 | value = item =/net
+        RxCachedThreadScheduler-1 | value = item =/.DS_Store
+        RxCachedThreadScheduler-1 | value = /.DS_Store
+        RxCachedThreadScheduler-1 | value = item =/.PKInstallSandboxManager
+        RxCachedThreadScheduler-1 | value = item =/.PKInstallSandboxManager-SystemSoftware
+        RxCachedThreadScheduler-1 | value = item =/bin
+        RxCachedThreadScheduler-1 | value = item =/installer.failurerequests
+        RxCachedThreadScheduler-1 | value = /installer.failurerequests
+        RxCachedThreadScheduler-1 | value = item =/Network
+        RxCachedThreadScheduler-1 | value = item =/sbin
+        RxCachedThreadScheduler-1 | value = item =/.file
+        RxCachedThreadScheduler-1 | value = /.file
+        RxCachedThreadScheduler-1 | value = item =/etc
+        RxCachedThreadScheduler-1 | value = item =/var
+        RxCachedThreadScheduler-1 | value = item =/Library
+        RxCachedThreadScheduler-1 | value = item =/.Trashes
+        RxCachedThreadScheduler-1 | value = item =/System
+        RxCachedThreadScheduler-1 | value = item =/.OSInstallerMessages
+        RxCachedThreadScheduler-1 | value = /.OSInstallerMessages
+        RxCachedThreadScheduler-1 | value = item =/.fseventsd
+        RxCachedThreadScheduler-1 | value = item =/private
+        RxCachedThreadScheduler-1 | value = item =/.DocumentRevisions-V100
+        RxCachedThreadScheduler-1 | value = item =/.vol
+        RxCachedThreadScheduler-1 | value = item =/Users
+        RxCachedThreadScheduler-1 | value = item =/Applications
+        RxCachedThreadScheduler-1 | value = item =/dev
+        RxCachedThreadScheduler-1 | value = item =/Volumes
+        RxCachedThreadScheduler-1 | value = item =/tmp
+        RxCachedThreadScheduler-1 | value = item =/cores
+         */
+    }
+
+    /*
+        trampoline()
+     */
+    public void ex7_trampolineScheduler() {
+        String[] orgs = {"1", "3", "5"};
+        Observable<String> source = Observable.fromArray(orgs);
+
+        source.subscribeOn(Schedulers.trampoline())
+                .map(item -> "<<" + item + ">>")
+                .subscribe(Log::println);
+
+        source.subscribeOn(Schedulers.trampoline())
+                .map(item -> "##" + item + "##")
+                .subscribe(Log::println);
+
+        TimeUtil.sleep(500);
+
+        /*
+        main | value = <<1>>
+        main | value = <<3>>
+        main | value = <<5>>
+        main | value = ##1##
+        main | value = ##3##
+        main | value = ##5##
+         */
+    }
+
+    public void ex7_trampolineScheduler2() {
+//        Observable<Long> source = Observable.interval(50L, TimeUnit.MILLISECONDS);
+        Observable<Long> source = Observable.interval(50L, TimeUnit.MILLISECONDS, Schedulers.trampoline());
+
+//        source.subscribeOn(Schedulers.trampoline())
+        source.map(item -> "<<" + item + ">>")
+                .take(5)
+                .subscribe(Log::println);
+
+//        source.subscribeOn(Schedulers.trampoline())
+        source.map(item -> "##" + item + "##")
+                .take(5)
+                .subscribe(Log::println);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        main | value = <<0>>
+        main | value = <<1>>
+        main | value = <<2>>
+        main | value = <<3>>
+        main | value = <<4>>
+        main | value = ##0##
+        main | value = ##1##
+        main | value = ##2##
+        main | value = ##3##
+        main | value = ##4##
+         */
+    }
+
+    /*
+        single()
+     */
+    public void ex8_singleScheduler() {
+        Observable<Integer> numbers = Observable.range(100, 5);
+        Observable<String> chars = Observable.range(0, 5)
+                .map(StringUtil::numberToCharacter);
+
+        numbers.subscribeOn(Schedulers.single())
+                .subscribe(Log::println);
+        chars.subscribeOn(Schedulers.single())
+                .subscribe(Log::println);
+
+        TimeUtil.sleep(500);
+
+        /*
+        RxSingleScheduler-1 | value = 100
+        RxSingleScheduler-1 | value = 101
+        RxSingleScheduler-1 | value = 102
+        RxSingleScheduler-1 | value = 103
+        RxSingleScheduler-1 | value = 104
+        RxSingleScheduler-1 | value = A
+        RxSingleScheduler-1 | value = B
+        RxSingleScheduler-1 | value = C
+        RxSingleScheduler-1 | value = D
+        RxSingleScheduler-1 | value = E
+         */
+    }
+
+    /*
+        from(Executor)
+     */
+    public void ex9_fromExecutorScheduler() {
+        final int THREAD_NUM = 10;
+
+        String[] data = {"1", "3", "5"};
+        Executor executor = Executors.newFixedThreadPool(THREAD_NUM);
+
+        Observable<String> source = Observable.fromArray(data);
+        source.subscribeOn(Schedulers.from(executor))
+                .map(item -> "<<" + item + ">>")
+                .subscribe(Log::println);
+        source.subscribeOn(Schedulers.from(executor))
+                .map(item -> "##" + item + "##")
+                .subscribe(Log::println);
+
+        TimeUtil.sleep(500);
+
+        /*
+        pool-2-thread-1 | value = <<1>>
+        pool-2-thread-1 | value = <<3>>
+        pool-2-thread-1 | value = <<5>>
+        pool-2-thread-2 | value = ##1##
+        pool-2-thread-2 | value = ##3##
+        pool-2-thread-2 | value = ##5##
+         */
     }
 }
