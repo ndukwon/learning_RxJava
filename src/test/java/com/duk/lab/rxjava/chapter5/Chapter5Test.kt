@@ -76,4 +76,22 @@ class Chapter5Test {
         println("Test Schedulers.from(Executor) Example 9")
         chapter5.ex9_fromExecutorScheduler()
     }
+
+    @DisplayName("Test calling URL Examples")
+    @Test
+    internal fun test_callingURL() {
+        val chapter5 = Chapter5()
+
+        println("Test calling URL Example 11")
+        chapter5.ex11_callingURL()
+
+        println("Test calling URL Example 14")
+        chapter5.ex14_callingURL_afterCallingURL()
+
+        println("Test calling URL Example 15")
+        chapter5.ex15_callingURL_afterCallingURL2()
+
+        println("Test calling URL Example 16")
+        chapter5.ex16_callingURLs()
+    }
 }

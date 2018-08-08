@@ -1,12 +1,15 @@
 package com.duk.lab.rxjava.chapter5;
 
 import com.duk.lab.rxjava.utils.Log;
+import com.duk.lab.rxjava.utils.OkHttpHelper;
 import com.duk.lab.rxjava.utils.StringUtil;
 import com.duk.lab.rxjava.utils.TimeUtil;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -14,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Chapter5 {
 
-    // ex1 are unnecessary.
+    // ex1 is unnecessary.
 
     public void ex2_subscribeOn_observeOn() {
         String[] objs = {"1-5", "2-T", "3-P"};
@@ -322,5 +325,167 @@ public class Chapter5 {
         pool-2-thread-2 | value = ##3##
         pool-2-thread-2 | value = ##5##
          */
+    }
+
+    // ex10 is unnecessary.
+
+    /*
+        URL call
+     */
+    public void ex11_callingURL() {
+        final String URL_README = "https://raw.githubusercontent.com/yudong80/reactivejava/master/README.md";
+        final OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(URL_README)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    Log.println(response.body().string());
+                }
+        });
+
+        TimeUtil.sleep(1000);
+
+        /*
+        OkHttp https://raw.githubuserc... | value = Welcome to Java Reactive Programming!!
+         */
+    }
+
+    // ex12, 13 are unnecessary.
+
+    public void ex14_callingURL_afterCallingURL() {
+        final String FIRST_URL = "https://api.github.com/zen";
+        final String GITHUB_ROOT = "https://raw.githubusercontent.com/yudong80/reactivejava/master/";
+        final String SECOND_URL = GITHUB_ROOT + "samples/callback_hell";
+        final OkHttpClient client = new OkHttpClient();
+
+        // FIRST CALL
+        Request request = new Request.Builder()
+                .url(FIRST_URL)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.println(response.body().string());
+
+                // SECOND CALL
+                Request request = new Request.Builder()
+                        .url(SECOND_URL)
+                        .build();
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.println(response.body().string());
+                    }
+                });
+            }
+        });
+
+        TimeUtil.sleep(2000);
+
+        /*
+        OkHttp https://api.github.com/... | value = Approachable is better than simple.
+        OkHttp https://raw.githubuserc... | value = Welcome to Callback Hell!!
+         */
+    }
+
+    public void ex15_callingURL_afterCallingURL2() {
+        final String FIRST_URL = "https://api.github.com/zen";
+        final String GITHUB_ROOT = "https://raw.githubusercontent.com/yudong80/reactivejava/master/";
+        final String SECOND_URL = GITHUB_ROOT + "samples/callback_heaven";
+
+        TimeUtil.setStartTime();
+
+        Observable.just(FIRST_URL)
+                .subscribeOn(Schedulers.io())
+                .map(OkHttpHelper::run)
+                .concatWith(Observable.just(SECOND_URL)
+                        .map(OkHttpHelper::run))
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(5000);
+
+        /*
+        RxCachedThreadScheduler-1 | 958 | value = Non-blocking is better than blocking.
+        RxCachedThreadScheduler-1 | 1224 | value = Welcome to Callback Hell!!
+         */
+    }
+
+    public void ex16_callingURLs() {
+        final String FIRST_URL = "https://api.github.com/zen";
+        final String GITHUB_ROOT = "https://raw.githubusercontent.com/yudong80/reactivejava/master/";
+        final String SECOND_URL = GITHUB_ROOT + "samples/callback_heaven";
+
+        TimeUtil.setStartTime();
+
+        Observable<String> first = Observable.just(FIRST_URL)
+                .subscribeOn(Schedulers.io())
+                .map(OkHttpHelper::run);
+
+        Observable<String> second = Observable.just(SECOND_URL)
+                .subscribeOn(Schedulers.io())
+                .map(OkHttpHelper::run);
+
+        Observable.zip(first, second, (a, b) -> "\n>> " + a + "\n>> " + b)
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(5000);
+
+        /*
+        RxCachedThreadScheduler-1 | 242 | value =
+        >> Practicality beats purity.
+        >> Happy Callback Heaven by RxJava2!!
+         */
+    }
+
+    /*
+        Weather API
+        https://openweathermap.org
+     */
+    private static final String CURRENT_API = "http://api.openweathermap.org/data/2.5/weather?q=London&appid=";
+    public void ex17_weatherAPI(String appId) {
+        Observable<String> source = Observable.just(CURRENT_API + appId)
+                .map(OkHttpHelper::run)
+                .subscribeOn(Schedulers.io());
+
+        Observable<String> temperature = source.map(this::parseTemperature);
+        Observable<String> city = source.map(this::parseCity);
+        Observable<String> country = source.map(this::parseCountry);
+    }
+
+    private String parseTemperature(String json) {
+        return parse(json, "\"temp\":[0-9]*.[0-9]*");
+    }
+
+    private String parseCity(String json) {
+        return parse(json, "\"name\":\"[a-zA-Z]*\"");
+    }
+
+    private String parseCountry(String json) {
+        return parse(json, "\"country\":\"[a-zA-Z]*\"");
+    }
+
+    private String parse(String json, String pattern) {
+        return "";
+        // TODO: make a example
     }
 }
