@@ -245,8 +245,17 @@
 >       * Rx의 Scheduler와 다르기 때문에 비추. 기존에 사용하던 Executor를 재사용할 때 한정적으로 활용.
 
 ### 3. 스케줄러를 활용하여 콜백 지옥 벗어나기
+* url의 요청이 계속되는 경우
+>   * url 주소를 item으로 입력하고
+>   * map으로 url을 요청하고 결과를 받아오는 전략
+>   * 이러한 과정을 io scheduler 를 사용하여 io동작을 효과적으로 처리
 
-### 4. observeOn()
+### 4. subscribeOn() VS observeOn()
+>   * subscribeOn()
+>       * Scheduler Thread 가 한번 정해지면 그 이후에는 다시 호출해서 변경하려고 해도 변경되지 않는다.
+>   * observeOn()
+>       * 여러번 호출하여 Scheduler Thread 를 변경할 수 있다.
+
 
 # Chapter 6. 안드로이드의 RxJava 활용
 # Chapter 7. 디버깅과 예외 처리
