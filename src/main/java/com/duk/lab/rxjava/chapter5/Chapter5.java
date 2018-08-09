@@ -14,6 +14,8 @@ import java.sql.Time;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Chapter5 {
 
@@ -462,14 +464,59 @@ public class Chapter5 {
         https://openweathermap.org
      */
     private static final String CURRENT_API = "http://api.openweathermap.org/data/2.5/weather?q=London&appid=";
+
     public void ex17_weatherAPI(String appId) {
         Observable<String> source = Observable.just(CURRENT_API + appId)
                 .map(OkHttpHelper::run)
+                .doOnNext(notUsed -> Log.println("doOnNext"))
                 .subscribeOn(Schedulers.io());
 
         Observable<String> temperature = source.map(this::parseTemperature);
         Observable<String> city = source.map(this::parseCity);
         Observable<String> country = source.map(this::parseCountry);
+
+        TimeUtil.setStartTime();
+        Observable.concat(temperature, city, country)
+                .observeOn(Schedulers.newThread())
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxCachedThreadScheduler-2 | value = doOnNext
+        RxNewThreadScheduler-1 | 265 | value = "temp":289.43
+        RxCachedThreadScheduler-1 | value = doOnNext
+        RxNewThreadScheduler-1 | 345 | value = "name":"London"
+        RxCachedThreadScheduler-2 | value = doOnNext
+        RxNewThreadScheduler-1 | 425 | value = "country":"GB"
+         */
+    }
+
+    public void ex18_weatherAPIWithShare(String appId) {
+        TimeUtil.setStartTime();
+
+        Observable<String> source = Observable.just(CURRENT_API + appId)
+                .map(OkHttpHelper::run)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(notUsed -> Log.println("doOnNext"))
+                .share()
+                .observeOn(Schedulers.newThread());
+
+        source.map(this::parseTemperature)
+                .subscribe(Log::printlnWithTime);
+        source.map(this::parseCity)
+                .subscribe(Log::printlnWithTime);
+        source.map(this::parseCountry)
+                .subscribe(Log::printlnWithTime);
+
+        TimeUtil.sleep(1000);
+
+        /*
+        RxCachedThreadScheduler-1 | value = doOnNext
+        RxNewThreadScheduler-2 | 91 | value = "temp":289.43
+        RxNewThreadScheduler-3 | 92 | value = "name":"London"
+        RxNewThreadScheduler-4 | 92 | value = "country":"GB"
+         */
     }
 
     private String parseTemperature(String json) {
@@ -484,8 +531,13 @@ public class Chapter5 {
         return parse(json, "\"country\":\"[a-zA-Z]*\"");
     }
 
-    private String parse(String json, String pattern) {
-        return "";
-        // TODO: make a example
+    private String parse(String json, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(json);
+
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return "N/A";
     }
 }

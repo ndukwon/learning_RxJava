@@ -93,5 +93,11 @@ class Chapter5Test {
 
         println("Test calling URL Example 16")
         chapter5.ex16_callingURLs()
+
+        println("Test calling URL Example 17")
+        chapter5.ex17_weatherAPI("yourAppId")
+
+        println("Test calling URL Example 18")
+        chapter5.ex18_weatherAPIWithShare("yourAppId")
     }
 }
