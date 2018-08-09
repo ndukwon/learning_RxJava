@@ -255,6 +255,8 @@
 >       * Scheduler Thread 가 한번 정해지면 그 이후에는 다시 호출해서 변경하려고 해도 변경되지 않는다.
 >   * observeOn()
 >       * 여러번 호출하여 Scheduler Thread 를 변경할 수 있다.
+>   * share() = publish() + refCount()
+>       * ConnectableObservable은 1개의 Observable을 여러 구독자가 공유하는 방식
 
 
 # Chapter 6. 안드로이드의 RxJava 활용
