@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">learning_RxAndroid</string>
+    <string name="title_activity_rx_android_basic">RxAndroidBasicActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
