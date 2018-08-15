@@ -21,7 +21,7 @@
 
 # Chapter 2: Observable 처음 만들기
 ### 1. Observable 객체(구독할 대상)를 생성하는 방법: Factory Pattern
->	* 1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
+>   * 1.1. just(): 임의의 data를 하나씩 순차적으로 인자에 추가하여 생성
 >   * 1.2. create(): onNext(), OnError(), onComplete() 를 직접 호출해야 함
 >       * 잠재적 Memory leak 주의: dispose할때 등록된 콜백을 모두 해지해야 함
 >       * subscribe 하는 동안만 onNext, onComplete 호출해야 함
@@ -76,7 +76,7 @@
 	                   
 
 ### 5. Subject
->	* 5.1. AsyncSubject
+>   * 5.1. AsyncSubject
 >       * 완료되기 전 마지막 data만 관심
 >       * onComplete() 와 동시에 data 발행 후 종료
 >       * subscriber로도 동작가능
@@ -260,6 +260,53 @@
 
 
 # Chapter 6. 안드로이드의 RxJava 활용
+### 1. RxAndroid 소개
+>   * 장점
+>       * 간단한 코드로 복잡한 병행(concurrency) 프로그래밍을 할 수 있다.
+>       * 비동기 구조에서 에러를 다루기 쉽다.
+>       * 함수형 프로그래밍 기법도 부분적으로 적용할 수 있다.
+>
+>   * 1.1. 리액티브 라이브러리와 API
+>   >   * Lifcycle - RxLifecycle: RxAndroid용 라이프사이클 처리
+>   >   * UI Widget - RxBinding
+>   >   * Notification - RxNotification
+>   >   * Database - SqlBrite: SQLiteOpenHelper + ContentResolver + Rx stream
+>   >   * Preference - rx-preferences: SharedPreferences
+>   >   * Location
+>   >       * Android-ReactiveLocation(RxJava 1)
+>   >       * RxLocation(RxJava 2)
+>   >   * Wearable
+>   >       * RxFit
+>   >       * RxWear
+>   >   * Runtime Permission - RxPermissions
+>   >   * Clipboard - RxClipboard
+>   >   * (Local)Broadcast - RxBroadcast
+>   >   * Bluetooth LE
+>   >       * RxAndroidBle: device management
+>   >       * ReactiveBeacons: 비콘 수신
+>   >   * Image picker - RxImagePicker: 이미지 선택
+>   >   * Network - ReactiveNetwork: 연결상태 확인
+>   >   * Data binding - RxDataBinding(RxJava 2)
+>
+>   * 1.2. 안드로이드 스튜디오 환경 설정
+>       * 각각의 Library마다 dependencies에 추가
+
+### 2. RxAndroid 기본
+>   * 2.1. Hello world 예제
+>   * 2.2. 제어 흐름
+>   * 2.3. RxLifecycle 라이브러리
+>   * 2.4. UI 이벤트 처리
+
+### 3. RxAndroid 활용
+>   * 3.1. 리액티브 RecyclerView
+>   * 3.2. 안드로이드 스레드를 대체하는 RxAndroid
+>   * 3.3. REST API를 활용한 네트워크 프로그래밍
+
+### 4. 메모리 누수
+>   * 4.1. Disposable 인터페이스를 이용하여 명시적으로 자원 해제
+>   * 4.2. RxLifecycle 라이브러리 이용
+>   * 4.3. CompositeDisposable 클래스 이용
+
 # Chapter 7. 디버깅과 예외 처리
 # Chapter 8. 테스팅과 Flowable
 
