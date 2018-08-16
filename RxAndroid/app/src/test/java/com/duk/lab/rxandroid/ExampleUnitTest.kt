@@ -1,4 +1,4 @@
-package com.duk.lab.learning_rxandroid
+package com.duk.lab.rxandroid
 
 import org.junit.Test
 

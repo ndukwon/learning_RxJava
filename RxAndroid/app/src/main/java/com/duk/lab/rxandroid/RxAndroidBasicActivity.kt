@@ -3,7 +3,7 @@ package com.duk.lab.rxandroid
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.duk.lab.learning_rxandroid.R
+import com.duk.lab.rxandroid.R
 
 import kotlinx.android.synthetic.main.activity_rx_android_basic.*
 

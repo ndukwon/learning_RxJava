@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.duk.lab.learning_rxandroid.R
+import com.duk.lab.rxandroid.R
 
 /**
  * A placeholder fragment containing a simple view.
