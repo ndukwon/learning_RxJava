@@ -1,4 +1,4 @@
-package com.duk.lab.rxandroid
+package com.duk.lab.rxandroid.basic
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -19,5 +19,4 @@ class RxAndroidBasicActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
     }
-
 }

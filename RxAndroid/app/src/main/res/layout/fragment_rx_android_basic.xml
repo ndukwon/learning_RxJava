@@ -1,10 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.duk.lab.rxandroid.RxAndroidBasicActivityFragment"
-    tools:showIn="@layout/activity_rx_android_basic">
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.duk.lab.rxandroid.basic.RxAndroidBasicActivityFragment"
+        tools:showIn="@layout/activity_rx_android_basic">
+
+        <Button
+            android:id="@+id/buttonEx2"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex_2"
+            app:layout_constraintEnd_toStartOf="@+id/textViewEx2"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewEx2"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonEx3"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex_3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx2" />
+
+        <TextView
+            android:id="@+id/textViewEx3"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx3"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx2" />
+
+        <Button
+            android:id="@+id/buttonEx4"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx3" />
+
+        <TextView
+            android:id="@+id/textViewEx4"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx4"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx3" />
+
+        <Button
+            android:id="@+id/buttonEx5_1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex5_java"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx4" />
+
+        <Button
+            android:id="@+id/buttonEx5_3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex5_rx2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx5_2" />
+
+        <Button
+            android:id="@+id/buttonEx5_2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex5_Rx1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx5_1" />
+
+        <TextView
+            android:id="@+id/textViewEx5_1"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx5_1"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx4" />
+
+        <TextView
+            android:id="@+id/textViewEx5_2"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx5_2"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx5_1" />
+
+        <TextView
+            android:id="@+id/textViewEx5_3"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx5_3"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx5_2" />
+
+        <Button
+            android:id="@+id/buttonEx7"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Ex7 RxLifecycle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx5_3" />
+
+        <Button
+            android:id="@+id/buttonEx8"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex8_event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx7" />
+
+        <TextView
+            android:id="@+id/textViewEx8"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx8"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx7"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/buttonEx9"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex9_event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx8" />
+
+        <Button
+            android:id="@+id/buttonEx10"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex10_event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx9" />
+
+        <TextView
+            android:id="@+id/textViewEx9"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx9"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx8" />
+
+        <TextView
+            android:id="@+id/textViewEx10"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx10"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx9" />
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

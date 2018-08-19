@@ -17,9 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.duk.lab.rxandroid.RxAndroidBasicActivity"
+            android:name="com.duk.lab.rxandroid.basic.RxAndroidBasicActivity"
             android:label="@string/title_activity_rx_android_basic"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.duk.lab.rxandroid.basic.HelloRxLifecycleActivity"
+            android:label="@string/title_activity_hello_rx_lifecycle" />
     </application>
 
 </manifest>
