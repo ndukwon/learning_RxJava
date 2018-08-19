@@ -294,8 +294,15 @@
 ### 2. RxAndroid 기본
 >   * 2.1. Hello world 예제
 >   * 2.2. 제어 흐름
+>       * for -> filter로 처리
 >   * 2.3. RxLifecycle 라이브러리
+>       * RxAppCompatActivity: 
 >   * 2.4. UI 이벤트 처리
+>       * 1) ObservableEmitter: 생성하여 OnClickListener생성시에 전달
+>       * 2) OnClickListener: view를 받아서 emitter.onNext()로 보내도록 하는 객체를 만들고 리스너로 등록
+>       * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
+>       * 혹은
+>       * RxView: view를 주고 1), 2), 3)를 알아서 처리하게 하고 구독만 처리
 
 ### 3. RxAndroid 활용
 >   * 3.1. 리액티브 RecyclerView
