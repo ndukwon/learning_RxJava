@@ -298,11 +298,16 @@
 >   * 2.3. RxLifecycle 라이브러리
 >       * RxAppCompatActivity: 
 >   * 2.4. UI 이벤트 처리
->       * 1) ObservableEmitter: 생성하여 OnClickListener생성시에 전달
->       * 2) OnClickListener: view를 받아서 emitter.onNext()로 보내도록 하는 객체를 만들고 리스너로 등록
->       * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
->       * 혹은
 >       * RxView: view를 주고 1), 2), 3)를 알아서 처리하게 하고 구독만 처리
+>           * 1) ObservableEmitter: 생성하여 OnClickListener생성시에 전달
+>           * 2) OnClickListener: view를 받아서 emitter.onNext()로 보내도록 하는 객체를 만들고 리스너로 등록
+>           * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
+>       * RxTextView: EditText를 주고
+>           * 1) ObservableEmitter: 생성하여 TextWatcher 생성시에 전달
+>           * 2) TextWatcher: text가 변경될때 emitter.onNext()로 보내도록 하는 객체를 만들고 addTextChangedListener에 등록
+>           * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
+>       * source.debounce(): onNext가 들어오는 시간차이 제한을 두어 그 시차사이에 발행되는 것들은 버린다.
+>           * ex) click 여러번을 제한하고 싶을때, 연속되서 들어오는 값에 대해서 시간차를 두어서 처리를 스킵하고 싶을때
 
 ### 3. RxAndroid 활용
 >   * 3.1. 리액티브 RecyclerView
