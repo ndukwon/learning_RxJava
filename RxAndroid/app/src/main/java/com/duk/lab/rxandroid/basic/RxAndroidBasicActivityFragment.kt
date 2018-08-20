@@ -14,6 +14,7 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.observers.DisposableObserver
 
 import kotlinx.android.synthetic.main.fragment_rx_android_basic.*
+import java.util.*
 
 /**
  * A placeholder fragment containing a simple view.
@@ -50,6 +51,12 @@ class RxAndroidBasicActivityFragment : Fragment() {
 
         // Event Listener
         registerEventListener()
+
+        // launch Debounce
+        buttonEx12.setOnClickListener {
+            val intent = Intent(activity, SearchActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     /*
@@ -130,6 +137,8 @@ class RxAndroidBasicActivityFragment : Fragment() {
         ex8_register()
         ex9_register()
         ex10_register()
+
+        ex11_register()
     }
 
     fun ex8_register() {
@@ -172,5 +181,20 @@ class RxAndroidBasicActivityFragment : Fragment() {
 
         // Making a subscription
         source.subscribe { text -> textViewEx10.text = text }
+    }
+
+    val rand = Random()
+    val LOCAL_KEY = 9
+    fun ex11_register() {
+        RxView.clicks(buttonEx11)
+                .map { local -> LOCAL_KEY }
+                .flatMap {
+                    // Getting server key
+                    val server_key = rand.nextInt(10)
+                    val result = LOCAL_KEY == server_key
+
+                    Observable.just("local: $it, remote: $server_key, result: $result")
+                }
+                .subscribe { text -> textViewEx11.text = text }
     }
 }

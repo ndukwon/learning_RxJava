@@ -229,5 +229,40 @@
             app:layout_constraintStart_toEndOf="@+id/buttonEx10"
             app:layout_constraintTop_toBottomOf="@+id/textViewEx9" />
 
+        <Button
+            android:id="@+id/buttonEx11"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx10" />
+
+        <TextView
+            android:id="@+id/textViewEx11"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/buttonEx11"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEx10" />
+
+        <Button
+            android:id="@+id/buttonEx12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="ex12_debounce"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEx11" />
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

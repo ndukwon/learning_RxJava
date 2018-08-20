@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.duk.lab.rxandroid.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,12 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.duk.lab.rxandroid.basic.RxAndroidBasicActivity"
+            android:name=".basic.RxAndroidBasicActivity"
             android:label="@string/title_activity_rx_android_basic"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.duk.lab.rxandroid.basic.HelloRxLifecycleActivity"
+            android:name=".basic.HelloRxLifecycleActivity"
             android:label="@string/title_activity_hello_rx_lifecycle" />
+        <activity android:name=".basic.SearchActivity"></activity>
     </application>
 
 </manifest>
