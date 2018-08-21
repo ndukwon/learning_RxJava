@@ -23,7 +23,11 @@
         <activity
             android:name=".basic.HelloRxLifecycleActivity"
             android:label="@string/title_activity_hello_rx_lifecycle" />
-        <activity android:name=".basic.SearchActivity"></activity>
+        <activity android:name=".basic.SearchActivity" />
+        <activity
+            android:name=".application.RecyclerActivity"
+            android:label="@string/title_activity_recycler"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

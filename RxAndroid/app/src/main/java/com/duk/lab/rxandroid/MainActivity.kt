@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.util.Log
+import com.duk.lab.rxandroid.application.RecyclerActivity
 import com.duk.lab.rxandroid.basic.RxAndroidBasicActivity
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
 
     fun gotoApplications(view: View?) {
         Log.i("MainActivity", "gotoApplications clicked!!")
+        val intent = Intent()
+        intent.setClass(this, RecyclerActivity::class.java)
+        startActivity(intent)
     }
 
     fun gotoMemoryLeakCases(view: View?) {
