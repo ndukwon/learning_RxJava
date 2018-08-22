@@ -12,15 +12,15 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_item, parent, false)
+                .inflate(R.layout.recycler_item, parent,false)
 
         return RecyclerViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val item = itemList[position]
-        holder.imageView?.setImageDrawable(item.image)
-        holder.titleView?.text = item.title
+        holder.imageView.setImageDrawable(item.image)
+        holder.titleView.text = item.title
         holder.getClickObserver(item)
                 .subscribe(publishSubject)
     }

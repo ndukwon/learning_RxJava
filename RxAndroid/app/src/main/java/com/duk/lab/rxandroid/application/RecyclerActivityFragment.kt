@@ -1,5 +1,6 @@
 package com.duk.lab.rxandroid.application
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.support.v4.app.Fragment
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.duk.lab.rxandroid.R
+import com.duk.lab.rxandroid.log.DLog
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -46,12 +48,11 @@ class RecyclerActivityFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        getPackageListByObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{
-                    recyclerViewAdapter?.addItem(it)
-                    recyclerViewAdapter?.notifyDataSetChanged()
-                }
+        // Making source
+        val source = getPackageListByObservable()
+
+        // Making subscription
+        subscribeObservable(source)
     }
 
     fun getPackageListByObservable(): Observable<RecyclerItem> {
@@ -68,6 +69,16 @@ class RecyclerActivityFragment : Fragment() {
                             it.activityInfo.loadIcon(pm),
                             it.activityInfo.loadLabel(pm).toString()
                     )
+                }
+                .doOnNext {item ->  DLog.i(item.title) }
+    }
+
+    fun subscribeObservable(source: Observable<RecyclerItem>) {
+        source.observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {item -> DLog.i(item.title) }
+                .subscribe{
+                    recyclerViewAdapter?.addItem(it)
+                    recyclerViewAdapter?.notifyDataSetChanged()
                 }
     }
 }
