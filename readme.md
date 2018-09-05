@@ -302,7 +302,7 @@
 >           * 1) ObservableEmitter: 생성하여 OnClickListener생성시에 전달
 >           * 2) OnClickListener: view를 받아서 emitter.onNext()로 보내도록 하는 객체를 만들고 리스너로 등록
 >           * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
->       * RxTextView: EditText를 주고
+>       * RxTextView: EditText를 주고 1), 2), 3)를 알아서 처리하게 하고 구독만 처리
 >           * 1) ObservableEmitter: 생성하여 TextWatcher 생성시에 전달
 >           * 2) TextWatcher: text가 변경될때 emitter.onNext()로 보내도록 하는 객체를 만들고 addTextChangedListener에 등록
 >           * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
@@ -311,7 +311,12 @@
 
 ### 3. RxAndroid 활용
 >   * 3.1. 리액티브 RecyclerView
+>       * list를 구할때 Observable로 비동기화
+>       * RecyclerView는 onItemClick에 대한 처리가 없으므로 각각의 item들에 대해서 onClick을 달아두게 되는데
+>       * onClick시 Observable을 발행하고 이러한 Obserbable을 다시 PublishSubject가 모아서 발행해주는 구조(장점인가?)
 >   * 3.2. 안드로이드 스레드를 대체하는 RxAndroid
+>       * Android 내부 구조는 UIThread에서 실행되기 위해 Handler가 
+>       * 
 >   * 3.3. REST API를 활용한 네트워크 프로그래밍
 
 ### 4. 메모리 누수
