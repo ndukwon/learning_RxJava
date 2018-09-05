@@ -13,7 +13,6 @@ class RecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val imageView: ImageView = itemView.findViewById(R.id.itemImage)
     val titleView: TextView = itemView.findViewById(R.id.itemText)
 
-
     fun getClickObserver(item: RecyclerItem): Observable<RecyclerItem> {
         return Observable.create { emitter: ObservableEmitter<RecyclerItem> ->
             itemView.setOnClickListener {

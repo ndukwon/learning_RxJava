@@ -27,7 +27,13 @@
         <activity
             android:name=".application.RecyclerActivity"
             android:label="@string/title_activity_recycler"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".application.AsyncActivity"
+            android:label="@string/title_activity_async"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".application.ApplicationActivity" />
+        <activity android:name=".application.TimerActivity"></activity>
     </application>
 
 </manifest>
