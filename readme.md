@@ -299,13 +299,13 @@
 >       * RxAppCompatActivity: 
 >   * 2.4. UI 이벤트 처리
 >       * RxView: view를 주고 1), 2), 3)를 알아서 처리하게 하고 구독만 처리
->           * 1) ObservableEmitter: 생성하여 OnClickListener생성시에 전달
->           * 2) OnClickListener: view를 받아서 emitter.onNext()로 보내도록 하는 객체를 만들고 리스너로 등록
->           * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
+>           1. ObservableEmitter: 생성하여 OnClickListener생성시에 전달
+>           2. OnClickListener: view를 받아서 emitter.onNext()로 보내도록 하는 객체를 만들고 리스너로 등록
+>           3. Observable: 이 emitter로 Observable을 발행하고 구독처리
 >       * RxTextView: EditText를 주고 1), 2), 3)를 알아서 처리하게 하고 구독만 처리
->           * 1) ObservableEmitter: 생성하여 TextWatcher 생성시에 전달
->           * 2) TextWatcher: text가 변경될때 emitter.onNext()로 보내도록 하는 객체를 만들고 addTextChangedListener에 등록
->           * 3) Observable: 이 emitter로 Observable을 발행하고 구독처리
+>           1. ObservableEmitter: 생성하여 TextWatcher 생성시에 전달
+>           2. TextWatcher: text가 변경될때 emitter.onNext()로 보내도록 하는 객체를 만들고 addTextChangedListener에 등록
+>           3. Observable: 이 emitter로 Observable을 발행하고 구독처리
 >       * source.debounce(): onNext가 들어오는 시간차이 제한을 두어 그 시차사이에 발행되는 것들은 버린다.
 >           * ex) click 여러번을 제한하고 싶을때, 연속되서 들어오는 값에 대해서 시간차를 두어서 처리를 스킵하고 싶을때
 
@@ -315,8 +315,26 @@
 >       * RecyclerView는 onItemClick에 대한 처리가 없으므로 각각의 item들에 대해서 onClick을 달아두게 되는데
 >       * onClick시 Observable을 발행하고 이러한 Obserbable을 다시 PublishSubject가 모아서 발행해주는 구조(장점인가?)
 >   * 3.2. 안드로이드 스레드를 대체하는 RxAndroid
->       * Android 내부 구조는 UIThread에서 실행되기 위해 Handler가 
->       * 
+>       * Android Thread는 UIThread에서 실행되기 위해 Handler가 필요함
+>       * (android.os) AsyncTask
+>           - 재사용 불가
+>           - Activity 종료시 신경써줘야 함(메모리 누수)
+>           - UI Thread 에서만 호출가능
+>       * 타이머 만들기
+>           * (java.util) Timer + TimerTask
+>               - delay: 첫 지연시간
+>               - period: 매번 텀을 둘 시간
+>           * (android.os) CountDownTimer
+>               - millisInFuture: 타이머가 총 수행하는 시간
+>               - countDownInterval: 매번 텀을 둘 시간
+>           * Handler
+>               - postDelayed 활용
+>           * Observable
+>               - interval 활용
+>               - repeatWhen + delay
+>           ~~~java
+>           source.repeatWhen { it.delay(1L, TimeUnit.SECONDS) }
+>           ~~~
 >   * 3.3. REST API를 활용한 네트워크 프로그래밍
 
 ### 4. 메모리 누수
