@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.duk.lab.rxandroid.R
+import com.duk.lab.rxandroid.application.recycler.RecyclerActivity
+import com.duk.lab.rxandroid.application.restapi.RestApiActivity
 import com.duk.lab.rxandroid.log.DLog
 
 class ApplicationActivity : AppCompatActivity() {
@@ -32,6 +34,13 @@ class ApplicationActivity : AppCompatActivity() {
         DLog.i( "gotoTimer clicked!!")
         val intent = Intent()
         intent.setClass(this, TimerActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun gotoRestApi(view: View) {
+        DLog.i( "gotoRestApi clicked!!")
+        val intent = Intent()
+        intent.setClass(this, RestApiActivity::class.java)
         startActivity(intent)
     }
 }

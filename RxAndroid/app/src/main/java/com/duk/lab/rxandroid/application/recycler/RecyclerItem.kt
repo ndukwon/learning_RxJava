@@ -1,4 +1,4 @@
-package com.duk.lab.rxandroid.application
+package com.duk.lab.rxandroid.application.recycler
 
 import android.graphics.drawable.Drawable
 

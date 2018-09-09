@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.duk.lab.rxandroid">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,7 +28,7 @@
             android:label="@string/title_activity_hello_rx_lifecycle" />
         <activity android:name=".basic.SearchActivity" />
         <activity
-            android:name=".application.RecyclerActivity"
+            android:name=".application.recycler.RecyclerActivity"
             android:label="@string/title_activity_recycler"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -33,7 +36,9 @@
             android:label="@string/title_activity_async"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".application.ApplicationActivity" />
-        <activity android:name=".application.TimerActivity"></activity>
+        <activity android:name=".application.TimerActivity" />
+        <activity android:name=".application.restapi.RestApiActivity" />
+        <activity android:name=".application.restapi.volley.VolleyActivity" />
     </application>
 
 </manifest>

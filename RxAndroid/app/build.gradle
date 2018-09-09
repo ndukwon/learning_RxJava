@@ -47,4 +47,7 @@ dependencies {
 
     // Rx Utils: https://github.com/JakeWharton/RxBinding
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+
+    // Volley: https://developer.android.com/training/volley/
+    implementation 'com.android.volley:volley:1.1.1'
 }
