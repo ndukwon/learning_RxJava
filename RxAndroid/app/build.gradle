@@ -23,6 +23,11 @@ android {
     dataBinding {
         enabled = true
     }
+
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
 }
 
 dependencies {
@@ -50,4 +55,11 @@ dependencies {
 
     // Volley: https://developer.android.com/training/volley/
     implementation 'com.android.volley:volley:1.1.1'
+
+    // Retrofit2
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'            // GsonConverterFactory
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'        // HttpLoggingIntercepter
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'           // RxJava2CallAdapterFactory
+    implementation 'com.squareup.retrofit2:adapter-java8:2.4.0'             // Java8CallAdapterFactory
 }

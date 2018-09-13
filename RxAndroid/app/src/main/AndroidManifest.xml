@@ -3,7 +3,7 @@
     package="com.duk.lab.rxandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -39,6 +39,7 @@
         <activity android:name=".application.TimerActivity" />
         <activity android:name=".application.restapi.RestApiActivity" />
         <activity android:name=".application.restapi.volley.VolleyActivity" />
+        <activity android:name=".application.restapi.retrofit2.Retrofit2Activity" />
     </application>
 
 </manifest>

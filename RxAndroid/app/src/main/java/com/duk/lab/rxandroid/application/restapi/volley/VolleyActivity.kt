@@ -14,7 +14,8 @@ import io.reactivex.observers.DisposableObserver
 
 class VolleyActivity : AppCompatActivity() {
 
-    val URL = "https://api.github.com"
+//    val URL = "https://api.github.com"
+    val URL = "http://time.jsontest.com/"
     var requestHelper: RequestHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.duk.lab.rxandroid.R
+import com.duk.lab.rxandroid.application.restapi.retrofit2.Retrofit2Activity
 import com.duk.lab.rxandroid.application.restapi.volley.VolleyActivity
 import com.duk.lab.rxandroid.log.DLog
 
@@ -19,6 +20,13 @@ class RestApiActivity : AppCompatActivity() {
         DLog.i( "gotoVolley clicked!!")
         val intent = Intent()
         intent.setClass(this, VolleyActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun gotoRetrofit2(view: View) {
+        DLog.i( "gotoRetrofit2 clicked!!")
+        val intent = Intent()
+        intent.setClass(this, Retrofit2Activity::class.java)
         startActivity(intent)
     }
 }
