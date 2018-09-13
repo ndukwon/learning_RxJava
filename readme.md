@@ -332,9 +332,21 @@
 >           * Observable
 >               - interval 활용
 >               - repeatWhen + delay
->           ~~~java
+>           ~~~kotlin
 >           source.repeatWhen { it.delay(1L, TimeUnit.SECONDS) }
 >           ~~~
+>       * Volley
+>           - Need to be fixed ㅠㅠ
+>       * Retrofit2
+>           - Retrofit: HttpClient/OkHttp 가능
+>           - Retrofit2: OkHttp만 가능
+>           - 공식지원 하고 있어서 API 결과를 Observable로 리턴할 수 있다.
+>           - 예제의 구성
+>               - JSON Data 양식 class
+>               - API에 맞는 JSON Data 양식을 지정해주는 interface
+>               - OkHttp와 URL등 API에 따라 기본세팅을 해주는 Adapter
+>               - API를 호출하여 화면에 표현하는 Fragment
+>           - Retrofit Callback은 UI Thread에서 동작함을 주의!
 >   * 3.3. REST API를 활용한 네트워크 프로그래밍
 
 ### 4. 메모리 누수
